@@ -2,6 +2,7 @@
   "model_paths": [
     "/assets/betterwithbags/models/entity/backpack.geo.json",
     "/assets/betterwithbags/models/entity/backpack_placed.geo.json",
-    "/assets/betterwithbags/models/entity/bedroll_attachment.geo.json"
+    "/assets/betterwithbags/models/entity/bedroll_attachment.geo.json",
+    "/assets/betterwithbags/models/entity/miners_helmet_candle.geo.json"
   ]
 }
