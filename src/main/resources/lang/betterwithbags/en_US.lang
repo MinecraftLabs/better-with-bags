@@ -16,6 +16,42 @@ item.betterwithbags.backpack.nether.desc=Fire-resistant pack with olivine magic.
 item.betterwithbags.bedroll.name=Bedroll
 item.betterwithbags.bedroll.desc=A portable sleeping roll. Skips the night without setting spawn.
 
+item.betterwithbags.miners_helmet_leather.name=Leather Miner's Helmet
+item.betterwithbags.miners_helmet_leather.desc=A leather helmet with a lamp. Illuminates the path ahead.
+
+item.betterwithbags.miners_helmet_leather_alt.name=Leather Miner's Helmet (Alt)
+item.betterwithbags.miners_helmet_leather_alt.desc=A leather helmet with a lamp. Illuminates the path ahead.
+
+item.betterwithbags.miners_helmet_leather_candle.name=Leather Miner's Helmet (Candle)
+item.betterwithbags.miners_helmet_leather_candle.desc=A leather helmet with a candle. Provides ambient light around you.
+
+item.betterwithbags.miners_helmet_leather_candle_alt.name=Leather Miner's Helmet (Candle Alt)
+item.betterwithbags.miners_helmet_leather_candle_alt.desc=A leather helmet with a candle. Provides ambient light around you.
+
+item.betterwithbags.miners_helmet_brick.name=Brick Miner's Helmet
+item.betterwithbags.miners_helmet_brick.desc=A brick helmet with a lamp. Illuminates the path ahead.
+
+item.betterwithbags.miners_helmet_brick_alt.name=Brick Miner's Helmet (Alt)
+item.betterwithbags.miners_helmet_brick_alt.desc=A brick helmet with a lamp. Illuminates the path ahead.
+
+item.betterwithbags.miners_helmet_brick_candle.name=Brick Miner's Helmet (Candle)
+item.betterwithbags.miners_helmet_brick_candle.desc=A brick helmet with a candle. Provides ambient light around you.
+
+item.betterwithbags.miners_helmet_brick_candle_alt.name=Brick Miner's Helmet (Candle Alt)
+item.betterwithbags.miners_helmet_brick_candle_alt.desc=A brick helmet with a candle. Provides ambient light around you.
+
+item.betterwithbags.miners_helmet_gold.name=Golden Miner's Helmet
+item.betterwithbags.miners_helmet_gold.desc=A golden helmet with a lamp. Illuminates the path ahead.
+
+item.betterwithbags.miners_helmet_gold_alt.name=Golden Miner's Helmet (Alt)
+item.betterwithbags.miners_helmet_gold_alt.desc=A golden helmet with a lamp. Illuminates the path ahead.
+
+item.betterwithbags.miners_helmet_gold_candle.name=Golden Miner's Helmet (Candle)
+item.betterwithbags.miners_helmet_gold_candle.desc=A golden helmet with a candle. Provides ambient light around you.
+
+item.betterwithbags.miners_helmet_gold_candle_alt.name=Golden Miner's Helmet (Candle Alt)
+item.betterwithbags.miners_helmet_gold_candle_alt.desc=A golden helmet with a candle. Provides ambient light around you.
+
 tile.betterwithbags.backpack.block.small.name=Placed Small Leather Satchel
 tile.betterwithbags.backpack.block.small.desc=A placed small leather satchel. 9 storage slots.
 tile.betterwithbags.backpack.block.medium.name=Placed Medium Leather Backpack
