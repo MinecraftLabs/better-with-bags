@@ -51,6 +51,31 @@ public class BackpackModels implements ModelEntrypoint {
         dispatcher.addDispatch(new ItemModelStandard(BackpackItems.BEDROLL, null)
             .setIcon(MOD_ID + ":item/bedroll"));
 
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_LEATHER, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_leather"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_LEATHER_ALT, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_leather_alt"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_LEATHER_CANDLE, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_leather_candle"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_LEATHER_CANDLE_ALT, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_leather_candle_alt"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_BRICK, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_brick"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_BRICK_ALT, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_brick_alt"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_BRICK_CANDLE, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_brick_candle"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_BRICK_CANDLE_ALT, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_brick_candle_alt"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_GOLD, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_gold"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_GOLD_ALT, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_gold_alt"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_GOLD_CANDLE, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_gold_candle"));
+        dispatcher.addDispatch(new ItemModelStandard(BackpackItems.MINERS_HELMET_GOLD_CANDLE_ALT, null)
+            .setIcon(MOD_ID + ":item/miners_helmet_gold_candle_alt"));
+
         for (BackpackTier tier : BackpackTier.values()) {
             Block<?> block = BackpackBlocks.getBlockForTier(tier);
             dispatcher.addDispatch(new ItemModelPlacedBackpack(block.asItem(), tier));
