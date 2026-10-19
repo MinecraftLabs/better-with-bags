@@ -12,11 +12,14 @@ import net.minecraft.client.gui.container.ScreenContainerAbstract;
 import net.minecraft.core.player.inventory.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Environment(EnvType.CLIENT)
 @Mixin(value = ScreenContainerAbstract.class, remap = false)
 public abstract class ScreenContainerAbstractMixin {
+    @Unique
+    private static final int BWB_OUTSIDE_SLOT_ID = -999;
 
     @Shadow
     public abstract Slot getSlotAtPosition(int mouseX, int mouseY);
@@ -33,7 +36,7 @@ public abstract class ScreenContainerAbstractMixin {
 
     @ModifyReturnValue(method = "getSlotId", at = @At("RETURN"))
     private int bwb$allowBackpackSlotClicks(int slotId, int mouseX, int mouseY) {
-        if (slotId == -999) {
+        if (slotId == BWB_OUTSIDE_SLOT_ID) {
             Slot slot = getSlotAtPosition(mouseX, mouseY);
             if (slot instanceof SlotBackpack || slot instanceof SlotBackpackAttachment) {
                 return slot.index;

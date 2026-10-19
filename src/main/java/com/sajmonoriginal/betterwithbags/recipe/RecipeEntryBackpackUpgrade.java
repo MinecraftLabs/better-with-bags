@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.recipe;
 
+import com.sajmonoriginal.betterwithbags.BetterWithBagsMod;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
@@ -15,7 +16,7 @@ import net.minecraft.core.player.inventory.container.ContainerCrafting;
 import java.lang.reflect.Type;
 
 public class RecipeEntryBackpackUpgrade extends RecipeEntryCraftingShaped implements HasJsonAdapter {
-    public static final String TYPE = "betterwithbags:crafting/backpack_upgrade";
+    public static final String TYPE = BetterWithBagsMod.MOD_ID + ":crafting/backpack_upgrade";
 
     public RecipeEntryBackpackUpgrade() {
         super();

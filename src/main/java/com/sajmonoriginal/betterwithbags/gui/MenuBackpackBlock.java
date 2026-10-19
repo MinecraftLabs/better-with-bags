@@ -11,7 +11,8 @@ public class MenuBackpackBlock extends MenuBackpackBase {
     public MenuBackpackBlock(ContainerInventory playerInventory, TileEntityBackpack tileEntity) {
         super(tileEntity.getTier());
         this.tileEntity = tileEntity;
-        addBackpackSlots(tileEntity, new SlotAttachmentBlock(tileEntity, 178, 18), playerInventory);
+        addBackpackSlots(tileEntity, new SlotAttachmentBlock(tileEntity,
+            BackpackPanelLayout.ATTACHMENT_SLOT_X, BackpackPanelLayout.MENU_SLOTS_TOP), playerInventory);
     }
 
     @Override

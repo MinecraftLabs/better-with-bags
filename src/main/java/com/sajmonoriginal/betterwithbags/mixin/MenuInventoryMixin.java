@@ -108,7 +108,7 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
             if (i < capacity) {
                 int row = i / 9;
                 int col = i % 9;
-                slot.x = 8 + col * 18;
+                slot.x = BackpackPanelLayout.SLOTS_LEFT + col * BackpackPanelLayout.SLOT_SPACING;
                 slot.y = BackpackPanelLayout.FIRST_SLOT_Y + row * BackpackPanelLayout.ROW_HEIGHT;
             } else {
                 slot.x = BWB_HIDDEN_POS;

@@ -21,7 +21,8 @@ public class MenuBackpack extends MenuBackpackBase {
         this.playerInventory = playerInventory;
         this.heldSlotIndex = slotIndex;
         this.backpackContainer = new ContainerHeldBackpack(playerInventory, slotIndex, tier);
-        addBackpackSlots(backpackContainer, new SlotAttachment(playerInventory, heldSlotIndex, 178, 18), playerInventory);
+        addBackpackSlots(backpackContainer, new SlotAttachment(playerInventory, heldSlotIndex,
+            BackpackPanelLayout.ATTACHMENT_SLOT_X, BackpackPanelLayout.MENU_SLOTS_TOP), playerInventory);
 
         Slot heldSlot = this.getSlotFor(playerInventory, heldSlotIndex);
         this.heldMenuSlot = heldSlot != null ? heldSlot.index : -1;

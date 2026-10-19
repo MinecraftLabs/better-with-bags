@@ -14,6 +14,8 @@ import net.minecraft.core.player.inventory.container.ContainerInventory;
 import net.minecraft.core.player.inventory.menu.MenuAbstract;
 import net.minecraft.core.player.inventory.slot.Slot;
 
+import static com.sajmonoriginal.betterwithbags.gui.BackpackPanelLayout.*;
+
 public abstract class MenuBackpackBase extends MenuAbstract {
     protected final BackpackTier tier;
     protected final int rows;
@@ -27,23 +29,23 @@ public abstract class MenuBackpackBase extends MenuAbstract {
 
     protected void addBackpackSlots(Container backpack, Slot attachmentSlot, ContainerInventory playerInventory) {
         for (int i = 0; i < capacity; i++) {
-            this.addSlot(new SlotBackpackItem(backpack, i, 8 + (i % 9) * 18, 18 + (i / 9) * 18));
+            this.addSlot(new SlotBackpackItem(backpack, i, SLOTS_LEFT + (i % 9) * SLOT_SPACING, MENU_SLOTS_TOP + (i / 9) * SLOT_SPACING));
         }
 
         if (tier.supportsAttachment()) {
             this.addSlot(attachmentSlot);
         }
 
-        int playerInvY = 17 + rows * 18 + 22;
+        int playerInvY = 17 + rows * SLOT_SPACING + 22;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, playerInvY + row * 18));
+                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, SLOTS_LEFT + col * SLOT_SPACING, playerInvY + row * SLOT_SPACING));
             }
         }
 
         int hotbarY = playerInvY + 54 + 4;
         for (int col = 0; col < 9; col++) {
-            this.addSlot(new Slot(playerInventory, col, 8 + col * 18, hotbarY));
+            this.addSlot(new Slot(playerInventory, col, SLOTS_LEFT + col * SLOT_SPACING, hotbarY));
         }
     }
 

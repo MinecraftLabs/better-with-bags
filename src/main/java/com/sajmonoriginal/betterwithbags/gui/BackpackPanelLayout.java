@@ -4,7 +4,11 @@ import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 
 public final class BackpackPanelLayout {
     public static final int INVENTORY_HEIGHT = 166;
-    public static final int ROW_HEIGHT = 18;
+    public static final int SLOT_SPACING = 18;
+    public static final int ROW_HEIGHT = SLOT_SPACING;
+    public static final int SLOTS_LEFT = 8;
+    public static final int MENU_SLOTS_TOP = 18;
+    public static final int MENU_WIDTH_WITH_ATTACHMENT = 199;
     public static final int PANEL_WIDTH = 176;
     public static final int PANEL_WIDTH_WITH_ATTACHMENT = 210;
     public static final int PANEL_OVERLAP = 3;
