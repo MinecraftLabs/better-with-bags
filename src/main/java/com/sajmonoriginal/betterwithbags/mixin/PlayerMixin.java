@@ -1,7 +1,6 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
 import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
-import com.sajmonoriginal.betterwithbags.block.BlockLogicBedroll;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -66,9 +65,7 @@ public abstract class PlayerMixin extends Entity {
 
     @Inject(method = "setPlayerSleeping", at = @At("TAIL"))
     private void bwb$adjustBedrollSleepPosition(int x, int y, int z, CallbackInfo ci) {
-        TilePos pos = new TilePos(x, y, z);
-        if (this.world != null && this.world.isBlockLoaded(pos)
-            && this.world.getBlockType(pos).getLogic() instanceof BlockLogicBedroll) {
+        if (this.world != null && this.world.isBlockLoaded(new TilePos(x, y, z)) && bwb$isBedroll(x, y, z)) {
             this.setPos(this.x, y + 0.5625, this.z);
         }
     }

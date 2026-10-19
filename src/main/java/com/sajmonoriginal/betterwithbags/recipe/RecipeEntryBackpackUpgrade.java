@@ -31,9 +31,8 @@ public class RecipeEntryBackpackUpgrade extends RecipeEntryCraftingShaped implem
         if (!super.matches(crafting)) {
             return false;
         }
-        ItemStack source = findBackpack(crafting);
         int capacity = ((ItemBackpack) getOutput().getItem()).getCapacity();
-        return source == null || ItemBackpack.getOccupiedSlotCount(source) <= capacity;
+        return ItemBackpack.getOccupiedSlotCount(findBackpack(crafting)) <= capacity;
     }
 
     @Override
