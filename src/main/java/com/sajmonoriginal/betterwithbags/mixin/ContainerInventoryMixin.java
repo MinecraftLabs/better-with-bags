@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.sajmonoriginal.betterwithbags.gui.MenuBackpack;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
@@ -7,8 +8,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ContainerInventory.class, remap = false)
 public abstract class ContainerInventoryMixin {
@@ -16,10 +15,8 @@ public abstract class ContainerInventoryMixin {
     @Final
     public Player player;
 
-    @Inject(method = "currentSlotLocked", at = @At("HEAD"), cancellable = true)
-    private void bwb$lockOpenBackpackSlot(CallbackInfoReturnable<Boolean> cir) {
-        if (this.player != null && this.player.containerMenu instanceof MenuBackpack) {
-            cir.setReturnValue(true);
-        }
+    @ModifyReturnValue(method = "currentSlotLocked", at = @At("RETURN"))
+    private boolean bwb$lockOpenBackpackSlot(boolean locked) {
+        return locked || this.player != null && this.player.containerMenu instanceof MenuBackpack;
     }
 }

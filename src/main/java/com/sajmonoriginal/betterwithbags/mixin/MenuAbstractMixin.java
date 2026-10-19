@@ -1,59 +1,31 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
-import com.sajmonoriginal.betterwithbags.gui.MenuBackpack;
-import com.sajmonoriginal.betterwithbags.gui.MenuBackpackBlock;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.sajmonoriginal.betterwithbags.gui.MenuBackpackBase;
 import com.sajmonoriginal.betterwithbags.util.BackpackMenuCapable;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.menu.MenuAbstract;
 import net.minecraft.core.player.inventory.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = MenuAbstract.class, remap = false)
 public abstract class MenuAbstractMixin {
-    @Shadow
-    public abstract Slot getSlot(int i);
 
-    @Inject(method = "getFreeSpace", at = @At("HEAD"), cancellable = true)
-    private void bwb$countOnlyAcceptingSlots(ItemStack item, IntList slots, CallbackInfoReturnable<Integer> cir) {
-        if (!bwb$hasBackpackSlots()) {
-            return;
-        }
-
-        int space = 0;
-        int max = item.getMaxStackSize();
-        for (int i = 0; i < slots.size(); i++) {
-            Slot slot = this.getSlot(slots.getInt(i));
-            if (slot == null || !slot.mayPlace(item)) {
-                continue;
-            }
-            ItemStack stackInSlot = slot.getItemStack();
-            if (stackInSlot == null) {
-                cir.setReturnValue(max);
-                return;
-            }
-            if (item.canStackWith(stackInSlot)) {
-                space += stackInSlot.getMaxStackSize() - stackInSlot.stackSize;
-            }
-            if (space >= max) {
-                cir.setReturnValue(space);
-                return;
-            }
-        }
-        cir.setReturnValue(space);
+    @ModifyExpressionValue(
+        method = "getFreeSpace",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/core/player/inventory/menu/MenuAbstract;getSlotFromList(Lit/unimi/dsi/fastutil/ints/IntList;I)Lnet/minecraft/core/player/inventory/slot/Slot;")
+    )
+    private Slot bwb$skipSlotsRefusingItem(Slot slot, ItemStack item, IntList slots) {
+        return slot != null && bwb$hasBackpackSlots() && !slot.mayPlace(item) ? null : slot;
     }
 
     @Unique
     private boolean bwb$hasBackpackSlots() {
         Object self = this;
-        if (self instanceof MenuBackpack || self instanceof MenuBackpackBlock) {
-            return true;
-        }
-        return self instanceof BackpackMenuCapable && ((BackpackMenuCapable) self).betterWithBags$hasBackpackSlots();
+        return self instanceof MenuBackpackBase
+            || self instanceof BackpackMenuCapable && ((BackpackMenuCapable) self).betterWithBags$hasBackpackSlots();
     }
 }
