@@ -11,7 +11,6 @@ import net.minecraft.core.lang.I18n;
 @Environment(EnvType.CLIENT)
 public abstract class ScreenBackpackBase extends ScreenContainerAbstract implements ResponsiveBackpackScreen {
     private static final String GUI_TEXTURE_BASE = "/assets/" + BetterWithBagsMod.MOD_ID + "/textures/gui/backpack_";
-    private static final int SCREEN_MARGIN = 8;
 
     protected final MenuBackpackBase menu;
     private final String guiTexture;
@@ -66,9 +65,7 @@ public abstract class ScreenBackpackBase extends ScreenContainerAbstract impleme
 
     @Override
     public float betterWithBags$getGuiScale() {
-        float horizontalScale = (this.width - SCREEN_MARGIN * 2) / (float) this.xSize;
-        float verticalScale = (this.height - SCREEN_MARGIN * 2) / (float) this.ySize;
-        return Math.min(1.0F, Math.min(horizontalScale, verticalScale));
+        return ResponsiveScreens.getFitScale(this, this.xSize, this.ySize);
     }
 
     @Override

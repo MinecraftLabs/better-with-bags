@@ -3,6 +3,7 @@ package com.sajmonoriginal.betterwithbags.mixin.client;
 import com.sajmonoriginal.betterwithbags.gui.BackpackInventoryPanel;
 import com.sajmonoriginal.betterwithbags.gui.BackpackPanelLayout;
 import com.sajmonoriginal.betterwithbags.gui.ResponsiveBackpackScreen;
+import com.sajmonoriginal.betterwithbags.gui.ResponsiveScreens;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.sajmonoriginal.betterwithbags.util.BackpackMenuCapable;
@@ -22,9 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(value = ScreenInventory.class, remap = false)
 public abstract class ScreenInventoryMixin extends ScreenContainerAbstract implements ResponsiveBackpackScreen {
-
-    @Unique
-    private static final int SCREEN_MARGIN = 8;
 
     @Unique
     private int bwb$backpackRows = 0;
@@ -105,10 +103,11 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
     private boolean bwb$contentOverflowsCurrentPosition() {
         int guiLeft = (this.width - this.xSize) / 2;
         int guiTop = (this.height - this.ySize) / 2;
-        return guiLeft < SCREEN_MARGIN ||
-            guiLeft + bwb$getContentWidth() > this.width - SCREEN_MARGIN ||
-            guiTop < SCREEN_MARGIN ||
-            guiTop + bwb$getContentHeight() > this.height - SCREEN_MARGIN;
+        int margin = ResponsiveScreens.SCREEN_MARGIN;
+        return guiLeft < margin ||
+            guiLeft + bwb$getContentWidth() > this.width - margin ||
+            guiTop < margin ||
+            guiTop + bwb$getContentHeight() > this.height - margin;
     }
 
     @Override
@@ -119,9 +118,7 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
 
     @Override
     public float betterWithBags$getGuiScale() {
-        float horizontalScale = (this.width - SCREEN_MARGIN * 2) / (float) bwb$getContentWidth();
-        float verticalScale = (this.height - SCREEN_MARGIN * 2) / (float) bwb$getContentHeight();
-        return Math.min(1.0F, Math.min(horizontalScale, verticalScale));
+        return ResponsiveScreens.getFitScale(this, bwb$getContentWidth(), bwb$getContentHeight());
     }
 
     @Override

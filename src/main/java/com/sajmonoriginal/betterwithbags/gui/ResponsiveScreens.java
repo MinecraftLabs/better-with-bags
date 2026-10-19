@@ -7,6 +7,7 @@ import net.minecraft.client.render.renderer.GLRenderer;
 
 @Environment(EnvType.CLIENT)
 public final class ResponsiveScreens {
+    public static final int SCREEN_MARGIN = 8;
 
     private ResponsiveScreens() {
     }
@@ -16,6 +17,12 @@ public final class ResponsiveScreens {
             return (ResponsiveBackpackScreen) screen;
         }
         return null;
+    }
+
+    public static float getFitScale(Screen screen, int contentWidth, int contentHeight) {
+        float horizontalScale = (screen.width - SCREEN_MARGIN * 2) / (float) contentWidth;
+        float verticalScale = (screen.height - SCREEN_MARGIN * 2) / (float) contentHeight;
+        return Math.min(1.0F, Math.min(horizontalScale, verticalScale));
     }
 
     public static void applyTransform(Screen screen, ResponsiveBackpackScreen layout) {
