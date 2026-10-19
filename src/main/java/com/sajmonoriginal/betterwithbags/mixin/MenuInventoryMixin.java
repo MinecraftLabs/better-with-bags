@@ -34,6 +34,10 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
 
     @Unique
     private static final int BWB_HIDDEN_POS = -9999;
+    @Unique
+    private static final int BWB_FIRST_INVENTORY_SLOT = 9;
+    @Unique
+    private static final int BWB_LAST_HOTBAR_SLOT = 44;
 
     @Unique
     private boolean bwb$hasBackpackSlots = false;
@@ -144,18 +148,23 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
         }
     }
 
+    @Unique
+    private static boolean bwb$isPlayerInventorySlot(int index) {
+        return index >= BWB_FIRST_INVENTORY_SLOT && index <= BWB_LAST_HOTBAR_SLOT;
+    }
+
     @ModifyReturnValue(method = "getTargetSlots", at = @At("RETURN"))
     private IntList bwb$addBackpackTargets(IntList original, InventoryAction action, Slot slot, int target, Player player) {
         betterWithBags$refreshBackpackSlots();
         if (original == null || !bwb$hasBackpackSlots || bwb$backpackSlotStartIndex < 0) {
             return original;
         }
-        if (slot.index < 9 || slot.index > 44) {
+        if (!bwb$isPlayerInventorySlot(slot.index)) {
             return original;
         }
         for (int i = 0; i < original.size(); i++) {
             int index = original.getInt(i);
-            if (index < 9 || index > 44) {
+            if (!bwb$isPlayerInventorySlot(index)) {
                 return original;
             }
         }
