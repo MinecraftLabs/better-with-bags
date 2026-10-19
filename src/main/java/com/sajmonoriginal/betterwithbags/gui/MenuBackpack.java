@@ -1,83 +1,33 @@
 package com.sajmonoriginal.betterwithbags.gui;
 
-import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.sajmonoriginal.betterwithbags.slot.SlotAttachment;
-import com.sajmonoriginal.betterwithbags.slot.SlotBackpackItem;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
-import net.minecraft.core.player.inventory.menu.MenuAbstract;
 import net.minecraft.core.player.inventory.slot.Slot;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntLists;
 
-public class MenuBackpack extends MenuAbstract {
-    private final BackpackTier tier;
-    private final int rows;
-    private final int capacity;
+public class MenuBackpack extends MenuBackpackBase {
     private final ContainerHeldBackpack backpackContainer;
     private final ContainerInventory playerInventory;
     private final int heldSlotIndex;
     private final int heldMenuSlot;
 
     public MenuBackpack(ContainerInventory playerInventory, ItemStack backpackStack) {
+        super(((ItemBackpack) backpackStack.getItem()).getTier());
         this.playerInventory = playerInventory;
         this.heldSlotIndex = playerInventory.getCurrentSlot();
-        ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
-        this.tier = backpack.getTier();
-        this.rows = tier.getRows();
-        this.capacity = tier.getSlots();
         this.backpackContainer = new ContainerHeldBackpack(playerInventory, heldSlotIndex);
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < 9; col++) {
-                int slotIndex = row * 9 + col;
-                if (slotIndex < capacity) {
-                    this.addSlot(new SlotBackpackItem(backpackContainer, slotIndex, 8 + col * 18, 18 + row * 18));
-                }
-            }
-        }
-
-        if (tier.supportsAttachment()) {
-            this.addSlot(new SlotAttachment(playerInventory, heldSlotIndex, 178, 18));
-        }
-
-        int playerInvY = 17 + rows * 18 + 22;
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 9; col++) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, playerInvY + row * 18));
-            }
-        }
-
-        int hotbarY = playerInvY + 54 + 4;
-        for (int col = 0; col < 9; col++) {
-            this.addSlot(new Slot(playerInventory, col, 8 + col * 18, hotbarY));
-        }
+        addBackpackSlots(backpackContainer, new SlotAttachment(playerInventory, heldSlotIndex, 178, 18), playerInventory);
 
         Slot heldSlot = this.getSlotFor(playerInventory, heldSlotIndex);
         this.heldMenuSlot = heldSlot != null ? heldSlot.index : -1;
     }
 
-    public int getRows() {
-        return rows;
-    }
-
-    public BackpackTier getTier() {
-        return tier;
-    }
-
     public ItemStack getBackpackStack() {
         return playerInventory.mainInventory[heldSlotIndex];
-    }
-
-    private int getAttachmentSlot() {
-        return tier.supportsAttachment() ? capacity : -1;
-    }
-
-    private int getPlayerSlotStart() {
-        return tier.supportsAttachment() ? capacity + 1 : capacity;
     }
 
     @Override
@@ -102,55 +52,9 @@ public class MenuBackpack extends MenuAbstract {
 
     @Override
     public IntList getMoveSlots(InventoryAction action, Slot slot, int target, Player player) {
-        IntList moveSlots = getMoveSlotsUnfiltered(action, slot);
+        IntList moveSlots = super.getMoveSlots(action, slot, target, player);
         moveSlots.rem(heldMenuSlot);
         return moveSlots;
-    }
-
-    private IntList getMoveSlotsUnfiltered(InventoryAction action, Slot slot) {
-        int attachmentSlot = getAttachmentSlot();
-        int playerStart = getPlayerSlotStart();
-        if (slot.index < capacity) {
-            return this.getSlots(slot.index, 1, false);
-        }
-        if (slot.index == attachmentSlot) {
-            return this.getSlots(attachmentSlot, 1, false);
-        }
-        if (action == InventoryAction.MOVE_ALL) {
-            if (slot.index >= playerStart && slot.index < playerStart + 27) {
-                return this.getSlots(playerStart, 27, false);
-            }
-            if (slot.index >= playerStart + 27) {
-                return this.getSlots(playerStart + 27, 9, false);
-            }
-        }
-        return this.getSlots(slot.index, 1, false);
-    }
-
-    @Override
-    public IntList getTargetSlots(InventoryAction action, Slot slot, int target, Player player) {
-        int attachmentSlot = getAttachmentSlot();
-        int playerStart = getPlayerSlotStart();
-        if (slot.index < capacity) {
-            return this.getSlots(playerStart, 36, false);
-        }
-        if (slot.index == attachmentSlot) {
-            return this.getSlots(playerStart, 36, false);
-        }
-        if (slot.index >= playerStart) {
-            ItemStack stack = slot.getItemStack();
-            if (ItemBackpack.isBackpack(stack)) {
-                return IntLists.EMPTY_LIST;
-            }
-            if (stack != null && stack.getItem() instanceof com.sajmonoriginal.betterwithbags.item.ItemBedroll) {
-                Slot attSlot = this.getSlot(attachmentSlot);
-                if (attSlot != null && attSlot.mayPlace(stack) && !attSlot.hasItem()) {
-                    return this.getSlots(attachmentSlot, 1, false);
-                }
-            }
-            return this.getSlots(0, capacity, false);
-        }
-        return IntLists.EMPTY_LIST;
     }
 
     @Override
