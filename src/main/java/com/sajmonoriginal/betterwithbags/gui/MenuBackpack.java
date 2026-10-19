@@ -29,7 +29,8 @@ public class MenuBackpack extends MenuBackpackBase {
 
     private static BackpackTier getTierAt(ContainerInventory playerInventory, int slotIndex) {
         ItemStack stack = playerInventory.mainInventory[slotIndex];
-        return stack != null && stack.getItem() instanceof ItemBackpack ? ((ItemBackpack) stack.getItem()).getTier() : BackpackTier.SMALL;
+        BackpackTier tier = ItemBackpack.getBackpackTier(stack);
+        return tier != null ? tier : BackpackTier.SMALL;
     }
 
     public ItemStack getBackpackStack() {
@@ -84,8 +85,6 @@ public class MenuBackpack extends MenuBackpackBase {
     }
 
     private boolean isBackpackInSlot() {
-        ItemStack current = playerInventory.mainInventory[heldSlotIndex];
-        return current != null && current.getItem() instanceof ItemBackpack &&
-            ((ItemBackpack) current.getItem()).getTier() == this.tier;
+        return ItemBackpack.getBackpackTier(playerInventory.mainInventory[heldSlotIndex]) == this.tier;
     }
 }

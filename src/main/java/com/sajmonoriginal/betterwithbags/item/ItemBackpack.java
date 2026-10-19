@@ -42,10 +42,6 @@ public class ItemBackpack extends Item implements IArmorItem<HumanArmorShape> {
         return tier.getSlots();
     }
 
-    public int getRows() {
-        return tier.getRows();
-    }
-
     @Override
     public boolean showFullDurability() {
         return true;
@@ -109,12 +105,16 @@ public class ItemBackpack extends Item implements IArmorItem<HumanArmorShape> {
         return HumanArmorShape.CHEST;
     }
 
+    public static BackpackTier getBackpackTier(ItemStack stack) {
+        return stack != null && stack.getItem() instanceof ItemBackpack ? ((ItemBackpack) stack.getItem()).getTier() : null;
+    }
+
     public static boolean isBackpack(ItemStack stack) {
         if (stack == null) return false;
         Item item = stack.getItem();
         if (item instanceof ItemBackpack) return true;
         return item instanceof ItemBlock
-            && BackpackBlocks.getTierForBlockId(((ItemBlock<?>) item).getBlock().id()) != null;
+            && BackpackBlocks.getTierForBlock(((ItemBlock<?>) item).getBlock()) != null;
     }
 
     public static boolean isWearingBackpack(Player player) {

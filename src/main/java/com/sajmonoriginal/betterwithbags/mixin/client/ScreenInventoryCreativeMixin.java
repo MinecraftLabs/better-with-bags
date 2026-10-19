@@ -25,7 +25,7 @@ public abstract class ScreenInventoryCreativeMixin extends ScreenInventory {
     private void bwb$drawBackpackPanel(float partialTicks, CallbackInfo ci) {
         ItemStack backpackStack = ItemBackpack.getWornBackpackStack(this.mc.thePlayer);
         if (backpackStack != null) {
-            BackpackInventoryPanel.draw(this, ((ItemBackpack) backpackStack.getItem()).getTier(), backpackStack);
+            BackpackInventoryPanel.draw(this, ItemBackpack.getBackpackTier(backpackStack), backpackStack);
         }
     }
 }

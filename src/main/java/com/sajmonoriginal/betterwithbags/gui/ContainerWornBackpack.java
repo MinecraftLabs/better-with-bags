@@ -32,9 +32,8 @@ public class ContainerWornBackpack extends ContainerBackpackContents {
 
     @Override
     public String getNameTranslationKey() {
-        return trackedBackpackStack != null
-            ? ((ItemBackpack) trackedBackpackStack.getItem()).getTier().getNameTranslationKey()
-            : BackpackTier.SMALL.getNameTranslationKey();
+        BackpackTier tier = ItemBackpack.getBackpackTier(trackedBackpackStack);
+        return (tier != null ? tier : BackpackTier.SMALL).getNameTranslationKey();
     }
 
     @Override

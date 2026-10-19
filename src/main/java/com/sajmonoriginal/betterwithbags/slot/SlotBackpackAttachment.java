@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.slot;
 
+import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.enums.HumanArmorShape;
@@ -54,7 +55,7 @@ public class SlotBackpackAttachment extends SlotAttachmentBase {
     }
 
     public boolean isActive() {
-        ItemStack backpackStack = getBackpackStack();
-        return backpackStack != null && ((ItemBackpack) backpackStack.getItem()).getTier().supportsAttachment();
+        BackpackTier tier = ItemBackpack.getBackpackTier(getBackpackStack());
+        return tier != null && tier.supportsAttachment();
     }
 }

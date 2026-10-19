@@ -7,6 +7,9 @@ import turniplabs.halplibe.helper.ItemBuilder;
 import turniplabs.halplibe.helper.creativeInventory.CreativeInventoryCategory;
 import turniplabs.halplibe.helper.creativeInventory.CreativeInventoryPlacement;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class BackpackItems {
     private static int currentId = BetterWithBagsMod.itemIdStart;
     private static boolean initialized = false;
@@ -17,6 +20,8 @@ public class BackpackItems {
     public static Item BACKPACK_REINFORCED;
     public static Item BACKPACK_NETHER;
     public static Item BEDROLL;
+
+    private static final Map<BackpackTier, Item> BY_TIER = new EnumMap<>(BackpackTier.class);
 
     private static String itemKey(String name) {
         return BetterWithBagsMod.MOD_ID + ":item/" + name;
@@ -56,16 +61,17 @@ public class BackpackItems {
             .addTags(ItemTags.IS_FIRE_PROOF)
             .build(new ItemBackpack("backpack.nether", itemKey("backpack_nether"), currentId++, BackpackTier.NETHER));
 
+        BY_TIER.put(BackpackTier.SMALL, BACKPACK_SMALL);
+        BY_TIER.put(BackpackTier.MEDIUM, BACKPACK_MEDIUM);
+        BY_TIER.put(BackpackTier.LARGE, BACKPACK_LARGE);
+        BY_TIER.put(BackpackTier.REINFORCED, BACKPACK_REINFORCED);
+        BY_TIER.put(BackpackTier.NETHER, BACKPACK_NETHER);
+
         BEDROLL = itemBuilder()
             .build(new ItemBedroll("bedroll", itemKey("bedroll"), currentId++));
     }
 
     public static Item getItemForTier(BackpackTier tier) {
-        if (tier == BackpackTier.SMALL) return BACKPACK_SMALL;
-        if (tier == BackpackTier.MEDIUM) return BACKPACK_MEDIUM;
-        if (tier == BackpackTier.LARGE) return BACKPACK_LARGE;
-        if (tier == BackpackTier.REINFORCED) return BACKPACK_REINFORCED;
-        if (tier == BackpackTier.NETHER) return BACKPACK_NETHER;
-        return BACKPACK_SMALL;
+        return BY_TIER.get(tier);
     }
 }

@@ -10,7 +10,6 @@ import net.minecraft.client.render.renderer.GLRenderer;
 import net.minecraft.client.render.renderer.State;
 import net.minecraft.client.render.tessellator.TessellatorGeneral;
 import net.minecraft.client.render.tileentity.TileEntityRenderer;
-import net.minecraft.core.block.Block;
 import net.minecraft.core.util.helper.Direction;
 import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
 
@@ -28,9 +27,7 @@ public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBac
 
     private BackpackTier getDisplayTier(TileEntityBackpack tileEntity) {
         if (tileEntity.worldObj != null) {
-            Block<?> block = tileEntity.worldObj.getBlockType(tileEntity.tilePos);
-            int blockId = block == null ? 0 : block.id();
-            BackpackTier blockTier = BackpackBlocks.getTierForBlockId(blockId);
+            BackpackTier blockTier = BackpackBlocks.getTierForBlock(tileEntity.worldObj.getBlockType(tileEntity.tilePos));
             if (blockTier != null) return blockTier;
         }
         return tileEntity.getTier();

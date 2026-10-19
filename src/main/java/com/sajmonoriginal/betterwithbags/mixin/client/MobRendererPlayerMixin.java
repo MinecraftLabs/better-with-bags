@@ -41,7 +41,7 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
             return;
         }
 
-        BackpackTier tier = ((ItemBackpack) backpackStack.getItem()).getTier();
+        BackpackTier tier = ItemBackpack.getBackpackTier(backpackStack);
         bwb$renderPart(player, partialTick, BackpackGeometry.WORN, BackpackGeometry.getWornTexture(tier));
         if (ItemBackpack.hasAttachment(backpackStack)) {
             bwb$renderPart(player, partialTick, BackpackGeometry.BEDROLL, BackpackGeometry.BEDROLL_TEXTURE);

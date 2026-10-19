@@ -22,11 +22,7 @@ public class ContainerHeldBackpack extends ContainerBackpackContents {
     @Override
     protected ItemStack getBackpackStack() {
         ItemStack current = playerInventory.mainInventory[slotIndex];
-        if (current != null && current.getItem() instanceof ItemBackpack
-            && ((ItemBackpack) current.getItem()).getTier() == tier) {
-            return current;
-        }
-        return null;
+        return ItemBackpack.getBackpackTier(current) == tier ? current : null;
     }
 
     @Override

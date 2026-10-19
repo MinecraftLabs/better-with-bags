@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.slot;
 
+import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
@@ -30,8 +31,7 @@ public class SlotAttachment extends SlotAttachmentBase {
 
     @Override
     protected boolean acceptsAttachment() {
-        ItemStack backpackStack = getBackpackStack();
-        return backpackStack != null && backpackStack.getItem() instanceof ItemBackpack
-            && ((ItemBackpack) backpackStack.getItem()).getTier().supportsAttachment();
+        BackpackTier tier = ItemBackpack.getBackpackTier(getBackpackStack());
+        return tier != null && tier.supportsAttachment();
     }
 }
