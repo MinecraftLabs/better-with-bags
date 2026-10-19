@@ -2,6 +2,7 @@ package com.sajmonoriginal.betterwithbags.slot;
 
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.entity.player.Player;
+import net.minecraft.core.enums.HumanArmorShape;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 
@@ -25,7 +26,11 @@ public class SlotBackpackAttachment extends SlotAttachmentBase {
 
     @Override
     protected void setAttachment(ItemStack stack) {
-        ItemBackpack.setAttachment(getBackpackStack(), stack);
+        ItemStack backpackStack = getBackpackStack();
+        if (backpackStack != null) {
+            ItemBackpack.setAttachment(backpackStack, stack);
+            playerInventory.player.setItemInArmorSlot(HumanArmorShape.CHEST, backpackStack.copy());
+        }
     }
 
     @Override
