@@ -85,7 +85,7 @@ public class BlockLogicBackpack extends BlockLogic {
     }
 
     private void pickUpBackpack(World world, int x, int y, int z, Player player, TileEntityBackpack backpackTE) {
-        ItemStack backpackItem = createItemFromTileEntity(backpackTE);
+        ItemStack backpackItem = takeItemFromTileEntity(backpackTE);
         world.setBlockWithNotify(x, y, z, 0);
         player.inventory.insertItem(backpackItem, false);
         if (backpackItem.stackSize > 0) {
@@ -95,9 +95,8 @@ public class BlockLogicBackpack extends BlockLogic {
             ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
     }
 
-    private ItemStack createItemFromTileEntity(TileEntityBackpack backpackTE) {
-        BackpackTier tier = backpackTE.getTier();
-        ItemStack stack = new ItemStack(BackpackItems.getItemForTier(tier));
+    private ItemStack takeItemFromTileEntity(TileEntityBackpack backpackTE) {
+        ItemStack stack = new ItemStack(BackpackItems.getItemForTier(this.tier));
 
         ItemStack[] contents = new ItemStack[backpackTE.getContainerSize()];
         for (int i = 0; i < contents.length; i++) {
@@ -109,13 +108,14 @@ public class BlockLogicBackpack extends BlockLogic {
             ItemBackpack.setAttachment(stack, backpackTE.getAttachment());
         }
 
+        backpackTE.clearContents();
         return stack;
     }
 
     @Override
-    public ItemStack[] getBreakResult(World world, EnumDropCause cause, int x, int y, int z, int meta, TileEntity tileEntity) {
-        if (tileEntity instanceof TileEntityBackpack) {
-            return new ItemStack[]{createItemFromTileEntity((TileEntityBackpack) tileEntity)};
+    public ItemStack[] getBreakResult(World world, EnumDropCause cause, TilePosc pos, int meta, TileEntity tileEntity) {
+        if (cause != EnumDropCause.PICK_BLOCK && tileEntity instanceof TileEntityBackpack) {
+            return new ItemStack[]{takeItemFromTileEntity((TileEntityBackpack) tileEntity)};
         }
         return new ItemStack[]{BackpackItems.getItemForTier(this.tier).getDefaultStack()};
     }

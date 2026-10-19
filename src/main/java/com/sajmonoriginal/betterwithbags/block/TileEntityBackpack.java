@@ -11,6 +11,8 @@ import net.minecraft.core.net.packet.PacketTileEntityData;
 import net.minecraft.core.player.inventory.container.Container;
 import net.minecraft.core.world.World;
 
+import java.util.Arrays;
+
 public class TileEntityBackpack extends TileEntity implements Container {
 
     private ItemStack[] contents;
@@ -47,6 +49,11 @@ public class TileEntityBackpack extends TileEntity implements Container {
 
     public boolean hasAttachment() {
         return attachment != null;
+    }
+
+    public void clearContents() {
+        Arrays.fill(contents, null);
+        attachment = null;
     }
 
     @Override
