@@ -87,19 +87,7 @@ public class ItemBackpack extends Item implements IArmorItem {
         if (te instanceof TileEntityBackpack) {
             TileEntityBackpack backpackTE = (TileEntityBackpack) te;
             backpackTE.setTier(this.tier);
-
-            ItemStack[] contents = getBackpackContents(itemstack);
-            if (contents != null) {
-                for (int i = 0; i < contents.length; i++) {
-                    backpackTE.setItem(i, contents[i]);
-                }
-            }
-
-            ItemStack attachment = getAttachment(itemstack);
-            if (attachment != null) {
-                backpackTE.setAttachment(attachment);
-            }
-            backpackTE.setCustomName(itemstack.getCustomName());
+            backpackTE.loadFromItem(itemstack);
         }
 
         itemstack.stackSize--;

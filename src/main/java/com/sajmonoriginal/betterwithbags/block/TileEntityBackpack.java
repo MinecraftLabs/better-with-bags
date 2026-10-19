@@ -2,7 +2,9 @@ package com.sajmonoriginal.betterwithbags.block;
 
 import com.mojang.nbt.tags.CompoundTag;
 import com.mojang.nbt.tags.ListTag;
+import com.sajmonoriginal.betterwithbags.item.BackpackItems;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
+import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.block.entity.TileEntity;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
@@ -10,6 +12,7 @@ import net.minecraft.core.net.packet.Packet;
 import net.minecraft.core.net.packet.PacketTileEntityData;
 import net.minecraft.core.player.inventory.container.Container;
 import net.minecraft.core.world.World;
+import net.minecraft.core.world.pos.TilePos;
 
 import java.util.Arrays;
 
@@ -19,6 +22,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
     private BackpackTier tier;
     private ItemStack attachment;
     private String customName;
+    private boolean taken;
 
     public TileEntityBackpack() {
         this.tier = BackpackTier.SMALL;
@@ -60,9 +64,40 @@ public class TileEntityBackpack extends TileEntity implements Container {
         this.customName = customName == null || customName.isEmpty() ? null : customName;
     }
 
-    public void clearContents() {
+    public boolean isEmpty() {
+        if (attachment != null) return false;
+        for (ItemStack stack : contents) {
+            if (stack != null) return false;
+        }
+        return true;
+    }
+
+    public void loadFromItem(ItemStack backpackStack) {
+        ItemStack[] stored = ItemBackpack.getBackpackContents(backpackStack);
+        if (stored != null) {
+            System.arraycopy(stored, 0, contents, 0, Math.min(stored.length, contents.length));
+        }
+        attachment = ItemBackpack.getAttachment(backpackStack);
+        setCustomName(backpackStack.getCustomName());
+        setChanged();
+    }
+
+    public ItemStack takeAsItem() {
+        ItemStack stack = new ItemStack(BackpackItems.getItemForTier(tier));
+        ItemBackpack.setBackpackContents(stack, contents);
+        if (attachment != null) {
+            ItemBackpack.setAttachment(stack, attachment);
+        }
+        stack.setCustomName(customName);
+
         Arrays.fill(contents, null);
         attachment = null;
+        taken = true;
+        return stack;
+    }
+
+    public boolean isTaken() {
+        return taken;
     }
 
     @Override
@@ -188,7 +223,9 @@ public class TileEntityBackpack extends TileEntity implements Container {
 
     @Override
     public void dropContents(World world, int x, int y, int z) {
-
+        if (!taken && !isEmpty()) {
+            world.dropItem(new TilePos(x, y, z), takeAsItem());
+        }
     }
 
     @Override

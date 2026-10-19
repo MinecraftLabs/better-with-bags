@@ -2,7 +2,6 @@ package com.sajmonoriginal.betterwithbags.block;
 
 import com.sajmonoriginal.betterwithbags.item.BackpackItems;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
-import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockLogic;
 import net.minecraft.core.block.entity.TileEntity;
@@ -101,7 +100,7 @@ public class BlockLogicBackpack extends BlockLogic {
     }
 
     private void pickUpBackpack(World world, int x, int y, int z, Player player, TileEntityBackpack backpackTE) {
-        ItemStack backpackItem = takeItemFromTileEntity(backpackTE);
+        ItemStack backpackItem = backpackTE.takeAsItem();
         world.setBlockWithNotify(x, y, z, 0);
         player.inventory.insertItem(backpackItem, false);
         if (backpackItem.stackSize > 0) {
@@ -111,28 +110,21 @@ public class BlockLogicBackpack extends BlockLogic {
             ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
     }
 
-    private ItemStack takeItemFromTileEntity(TileEntityBackpack backpackTE) {
-        ItemStack stack = new ItemStack(BackpackItems.getItemForTier(this.tier));
-
-        ItemStack[] contents = new ItemStack[backpackTE.getContainerSize()];
-        for (int i = 0; i < contents.length; i++) {
-            contents[i] = backpackTE.getItem(i);
-        }
-        ItemBackpack.setBackpackContents(stack, contents);
-
-        if (backpackTE.hasAttachment()) {
-            ItemBackpack.setAttachment(stack, backpackTE.getAttachment());
-        }
-        stack.setCustomName(backpackTE.getCustomName());
-
-        backpackTE.clearContents();
-        return stack;
-    }
-
     @Override
     public ItemStack[] getBreakResult(World world, EnumDropCause cause, TilePosc pos, int meta, TileEntity tileEntity) {
-        if (cause != EnumDropCause.PICK_BLOCK && tileEntity instanceof TileEntityBackpack) {
-            return new ItemStack[]{takeItemFromTileEntity((TileEntityBackpack) tileEntity)};
+        if (cause == EnumDropCause.PICK_BLOCK) {
+            return new ItemStack[]{BackpackItems.getItemForTier(this.tier).getDefaultStack()};
+        }
+        if (tileEntity == null) {
+            tileEntity = world.getTileEntity(pos);
+        }
+        if (tileEntity instanceof TileEntityBackpack) {
+            TileEntityBackpack backpackTE = (TileEntityBackpack) tileEntity;
+            if (backpackTE.isTaken()) {
+                return null;
+            }
+            syncTier(backpackTE);
+            return new ItemStack[]{backpackTE.takeAsItem()};
         }
         return new ItemStack[]{BackpackItems.getItemForTier(this.tier).getDefaultStack()};
     }
