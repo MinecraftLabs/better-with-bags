@@ -41,6 +41,10 @@ public enum BackpackTier {
         return this == NETHER;
     }
 
+    public String getNameTranslationKey() {
+        return BackpackItems.getItemForTier(this).getKey() + ".name";
+    }
+
     public boolean supportsAttachment() {
         return this == LARGE || this == REINFORCED || this == NETHER;
     }

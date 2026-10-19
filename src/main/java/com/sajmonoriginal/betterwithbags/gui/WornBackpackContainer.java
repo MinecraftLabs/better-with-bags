@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.gui;
 
+import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
@@ -90,7 +91,9 @@ public class WornBackpackContainer implements Container {
 
     @Override
     public String getNameTranslationKey() {
-        return "container.backpack";
+        return trackedBackpackStack != null
+            ? ((ItemBackpack) trackedBackpackStack.getItem()).getTier().getNameTranslationKey()
+            : BackpackTier.SMALL.getNameTranslationKey();
     }
 
     @Override

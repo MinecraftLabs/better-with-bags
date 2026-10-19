@@ -78,7 +78,7 @@ public class BackpackInventoryContainer implements Container {
 
     @Override
     public String getNameTranslationKey() {
-        return "container.backpack";
+        return tier.getNameTranslationKey();
     }
 
     @Override

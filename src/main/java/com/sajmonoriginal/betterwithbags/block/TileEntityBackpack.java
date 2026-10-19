@@ -140,7 +140,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
 
     @Override
     public String getNameTranslationKey() {
-        return "container.backpack." + tier.getName();
+        return tier.getNameTranslationKey();
     }
 
     @Override
