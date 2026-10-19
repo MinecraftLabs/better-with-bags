@@ -12,15 +12,15 @@ public final class BedrollModel {
 
     private static final String TEX_BASE = "/assets/" + BetterWithBagsMod.MOD_ID + "/textures/block/bedroll/";
 
-    private static final String HEAD_TOP = TEX_BASE + "foot_top.png";
-    private static final String HEAD_BOTTOM = TEX_BASE + "foot_bottom.png";
-    private static final String HEAD_SIDE = TEX_BASE + "foot_side.png";
-    private static final String HEAD_FRONT = TEX_BASE + "foot_front.png";
+    private static final String HEAD_TOP = TEX_BASE + "head_top.png";
+    private static final String HEAD_BOTTOM = TEX_BASE + "head_bottom.png";
+    private static final String HEAD_SIDE = TEX_BASE + "head_side.png";
+    private static final String HEAD_FRONT = TEX_BASE + "head_front.png";
 
-    private static final String FOOT_TOP = TEX_BASE + "head_top.png";
-    private static final String FOOT_BOTTOM = TEX_BASE + "head_bottom.png";
-    private static final String FOOT_SIDE = TEX_BASE + "head_side.png";
-    private static final String FOOT_FRONT = TEX_BASE + "head_front.png";
+    private static final String FOOT_TOP = TEX_BASE + "foot_top.png";
+    private static final String FOOT_BOTTOM = TEX_BASE + "foot_bottom.png";
+    private static final String FOOT_SIDE = TEX_BASE + "foot_side.png";
+    private static final String FOOT_FRONT = TEX_BASE + "foot_front.png";
 
     private static final float H = 4f / 16f;
     private static final float SIDE_V0 = 12f / 16f;
