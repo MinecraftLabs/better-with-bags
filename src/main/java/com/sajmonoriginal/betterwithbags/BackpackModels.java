@@ -17,31 +17,11 @@ import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.client.render.item.model.ItemModelDispatcher;
 import net.minecraft.client.render.item.model.ItemModelStandard;
 import net.minecraft.core.block.Block;
-import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
-
-import java.io.InputStream;
 
 @Environment(EnvType.CLIENT)
 public class BackpackModels {
 
     private static final String MOD_ID = BetterWithBagsMod.MOD_ID;
-
-    private static void loadGeo(String path) {
-        try (InputStream in = BackpackModels.class.getResourceAsStream(path)) {
-            if (in != null) {
-                EntityGeometryMojangData.Cache.loadModelsFromResource(in);
-            } else {
-                BetterWithBagsMod.LOGGER.error("Geo resource not found: {}", path);
-            }
-        } catch (Exception e) {
-            BetterWithBagsMod.LOGGER.error("Failed to load geo: {}", path, e);
-        }
-    }
-
-    public static void loadBwbGeoModels() {
-        loadGeo("/assets/betterwithbags/models/entity/backpack.geo.json");
-        loadGeo("/assets/betterwithbags/models/entity/bedroll_attachment.geo.json");
-    }
 
     public static void initBlockModels(BlockModelDispatcher dispatcher) {
         dispatcher.addDispatch(BackpackBlocks.BACKPACK_BLOCK_SMALL, new BlockModelBag<>(BackpackBlocks.BACKPACK_BLOCK_SMALL));

@@ -24,7 +24,6 @@ public class BetterWithBagsClientMod implements ClientModInitializer {
         Key key = Key.of(BetterWithBagsMod.MOD_ID);
         ClientEvents.BLOCK_MODEL_RELOAD.listen(key, BackpackModels::initBlockModels);
         ClientEvents.ITEM_MODEL_RELOAD.listen(key, BackpackModels::initItemModels);
-        ClientEvents.ENTITY_RENDERER_RELOAD.listen(key, dispatcher -> BackpackModels.loadBwbGeoModels());
         ClientEvents.TILE_ENTITY_RENDERER_RELOAD.listen(key, BackpackModels::initTileEntityModels);
         Catalyst.GUIS.register(BackpackGuis.HELD, new ItemGuiEntry<>(ContainerHeldBackpack.class, MenuBackpack.class, ScreenBackpack::new));
         Catalyst.GUIS.register(BackpackGuis.PLACED, new TileGuiEntry<>(TileEntityBackpack.class, MenuBackpackBlock.class, ScreenBackpackBlock::new));
