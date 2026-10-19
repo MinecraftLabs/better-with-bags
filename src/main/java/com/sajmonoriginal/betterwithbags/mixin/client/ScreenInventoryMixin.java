@@ -1,6 +1,7 @@
 package com.sajmonoriginal.betterwithbags.mixin.client;
 
-import com.sajmonoriginal.betterwithbags.BetterWithBagsMod;
+import com.sajmonoriginal.betterwithbags.gui.BackpackInventoryPanel;
+import com.sajmonoriginal.betterwithbags.gui.BackpackPanelLayout;
 import com.sajmonoriginal.betterwithbags.gui.ResponsiveBackpackScreen;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
@@ -11,9 +12,7 @@ import net.minecraft.client.gui.container.ScreenContainerAbstract;
 import net.minecraft.client.gui.container.ScreenInventory;
 import net.minecraft.client.gui.container.ScreenInventoryCreative;
 import net.minecraft.client.render.renderer.GLRenderer;
-import net.minecraft.client.render.renderer.State;
 import net.minecraft.core.player.inventory.menu.MenuAbstract;
-import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.menu.MenuInventory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,23 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ScreenInventoryMixin extends ScreenContainerAbstract implements ResponsiveBackpackScreen {
 
     @Unique
-    private static final String EXTENSION_TEXTURE_BASE = "/assets/" + BetterWithBagsMod.MOD_ID + "/textures/gui/backpack_extension_";
-    @Unique
-    private static final int STANDARD_HEIGHT = 166;
-    @Unique
-    private static final int ROW_HEIGHT = 18;
-    @Unique
-    private static final int EXTENSION_WIDTH = 176;
-    @Unique
-    private static final int EXTENSION_OVERLAP = 3;
-    @Unique
-    private static final int EXTENSION_TITLE_HEIGHT = 14;
-    @Unique
-    private static final int EXTENSION_BOTTOM_HEIGHT = 7;
-    @Unique
     private static final int SCREEN_MARGIN = 8;
-    @Unique
-    private static final int ATTACHMENT_PANEL_WIDTH = 210;
 
     @Unique
     private int bwb$backpackRows = 0;
@@ -137,13 +120,13 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
         if ((Object) this instanceof ScreenInventoryCreative) {
             return this.xSize;
         }
-        return this.bwb$currentTier != null && this.bwb$currentTier.supportsAttachment()
-            ? ATTACHMENT_PANEL_WIDTH : EXTENSION_WIDTH;
+        return this.bwb$currentTier != null
+            ? BackpackPanelLayout.getContentWidth(this.bwb$currentTier) : BackpackPanelLayout.PANEL_WIDTH;
     }
 
     @Unique
     private int bwb$getContentHeight() {
-        return STANDARD_HEIGHT + EXTENSION_TITLE_HEIGHT + this.bwb$backpackRows * ROW_HEIGHT + EXTENSION_BOTTOM_HEIGHT;
+        return BackpackPanelLayout.getContentHeight(this.bwb$backpackRows);
     }
 
     @Unique
@@ -198,30 +181,8 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
 
     @Inject(method = "drawGuiContainerBackgroundLayer", at = @At("HEAD"))
     private void bwb$drawBackpackPanel(float partialTicks, CallbackInfo ci) {
-        if (this.bwb$backpackRows <= 0 || this.bwb$currentTier == null) {
-            return;
+        if (this.bwb$backpackRows > 0 && this.bwb$currentTier != null) {
+            BackpackInventoryPanel.draw(this, this.bwb$currentTier, ItemBackpack.getWornBackpackStack(this.mc.thePlayer));
         }
-
-        int guiLeft = (this.width - this.xSize) / 2;
-        int guiTop = (this.height - this.ySize) / 2;
-
-        int panelY = guiTop + STANDARD_HEIGHT - EXTENSION_OVERLAP;
-
-        GLRenderer.enableState(State.BLEND);
-        GLRenderer.setColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        String extTexture = EXTENSION_TEXTURE_BASE + this.bwb$currentTier.getName() + ".png";
-        this.mc.textureManager.loadTexture(extTexture).bind();
-
-        int panelHeight = EXTENSION_OVERLAP + EXTENSION_TITLE_HEIGHT + this.bwb$backpackRows * ROW_HEIGHT + EXTENSION_BOTTOM_HEIGHT;
-        this.drawTexturedModalRect(guiLeft, panelY, 0, 0, EXTENSION_WIDTH, panelHeight);
-
-        if (this.bwb$currentTier.supportsAttachment()) {
-            this.drawTexturedModalRect(guiLeft + 174, panelY + 13, 174, 13, 36, 26);
-        }
-
-        ItemStack wornStack = ItemBackpack.getWornBackpackStack(this.mc.thePlayer);
-        String title = wornStack != null ? wornStack.getDisplayName() : "";
-        this.fontRenderer.render(title, guiLeft + 8, panelY + EXTENSION_OVERLAP + 4).setColor(0xFFFFFF).call();
-        GLRenderer.setColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

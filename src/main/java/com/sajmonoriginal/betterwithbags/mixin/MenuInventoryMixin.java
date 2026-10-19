@@ -1,6 +1,7 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.sajmonoriginal.betterwithbags.gui.BackpackPanelLayout;
 import com.sajmonoriginal.betterwithbags.gui.ContainerWornBackpack;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
@@ -34,12 +35,6 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
     @Shadow
     public ContainerInventory inventory;
 
-    @Unique
-    private static final int STANDARD_HEIGHT = 166;
-    @Unique
-    private static final int ROW_HEIGHT = 18;
-    @Unique
-    private static final int EXTENSION_TITLE_HEIGHT = 14;
     @Unique
     private static final int HIDDEN_Y = -9999;
     @Unique
@@ -130,7 +125,7 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
                 int row = i / 9;
                 int col = i % 9;
                 slot.x = 8 + col * 18;
-                slot.y = STANDARD_HEIGHT + EXTENSION_TITLE_HEIGHT + 1 + row * ROW_HEIGHT;
+                slot.y = BackpackPanelLayout.FIRST_SLOT_Y + row * BackpackPanelLayout.ROW_HEIGHT;
             } else {
                 slot.x = HIDDEN_Y;
                 slot.y = HIDDEN_Y;
@@ -138,8 +133,8 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
         }
 
         if (bwb$attachmentSlot != null && bwb$attachmentSlot.isActive()) {
-            bwb$attachmentSlot.x = 178;
-            bwb$attachmentSlot.y = STANDARD_HEIGHT + EXTENSION_TITLE_HEIGHT + 1;
+            bwb$attachmentSlot.x = BackpackPanelLayout.ATTACHMENT_SLOT_X;
+            bwb$attachmentSlot.y = BackpackPanelLayout.FIRST_SLOT_Y;
         } else if (bwb$attachmentSlot != null) {
             bwb$attachmentSlot.x = HIDDEN_Y;
             bwb$attachmentSlot.y = HIDDEN_Y;
