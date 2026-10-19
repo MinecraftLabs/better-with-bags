@@ -66,6 +66,10 @@ public class ContainerBackpack extends MenuAbstract {
         return tier;
     }
 
+    public ItemStack getBackpackStack() {
+        return playerInventory.mainInventory[heldSlotIndex];
+    }
+
     private int getAttachmentSlot() {
         return tier.supportsAttachment() ? capacity : -1;
     }

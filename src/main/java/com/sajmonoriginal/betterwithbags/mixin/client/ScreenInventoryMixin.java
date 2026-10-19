@@ -13,6 +13,7 @@ import net.minecraft.client.gui.container.ScreenInventoryCreative;
 import net.minecraft.client.render.renderer.GLRenderer;
 import net.minecraft.client.render.renderer.State;
 import net.minecraft.core.player.inventory.menu.MenuAbstract;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.menu.MenuInventory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -221,9 +222,9 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
             this.drawTexturedModalRect(guiLeft + 174, panelY + 13, 174, 13, 36, 26);
         }
 
-        String tierName = this.bwb$currentTier.getName();
-        tierName = tierName.substring(0, 1).toUpperCase() + tierName.substring(1);
-        this.fontRenderer.render(tierName + " Backpack", guiLeft + 8, panelY + EXTENSION_OVERLAP + 4).setColor(0xFFFFFF).call();
+        ItemStack wornStack = ItemBackpack.getWornBackpackStack(this.mc.thePlayer);
+        String title = wornStack != null ? wornStack.getDisplayName() : "";
+        this.fontRenderer.render(title, guiLeft + 8, panelY + EXTENSION_OVERLAP + 4).setColor(0xFFFFFF).call();
         GLRenderer.setColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

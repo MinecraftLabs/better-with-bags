@@ -2,11 +2,13 @@ package com.sajmonoriginal.betterwithbags.gui;
 
 import com.sajmonoriginal.betterwithbags.BetterWithBagsMod;
 import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
+import com.sajmonoriginal.betterwithbags.item.BackpackItems;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.renderer.GLRenderer;
 import net.minecraft.client.render.renderer.State;
+import net.minecraft.core.lang.I18n;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 
 @Environment(EnvType.CLIENT)
@@ -48,9 +50,8 @@ public class ScreenBackpackBlock extends ScreenBackpackResponsive {
 
     @Override
     public void drawGuiContainerForegroundLayer() {
-        BackpackTier tier = container.getTier();
-        String tierName = tier.name().substring(0, 1) + tier.name().substring(1).toLowerCase();
-        this.fontRenderer.render(tierName + " Backpack", 8, 6).setColor(0xFFFFFF).call();
-        this.fontRenderer.render("Inventory", 8, this.ySize - 96 + 2).setColor(0x404040).call();
+        String title = BackpackItems.getItemForTier(container.getTier()).getDefaultStack().getDisplayName();
+        this.fontRenderer.render(title, 8, 6).setColor(0xFFFFFF).call();
+        this.fontRenderer.render(I18n.getInstance().translateKey("container.inventory.name"), 8, this.ySize - 96 + 2).setColor(0x404040).call();
     }
 }
