@@ -39,7 +39,6 @@ dependencies {
 
     implementation(libs.loader)
     implementation(libs.halplibe)
-    implementation(libs.uselessNumerical)
 
     compileOnly(libs.bundles.btaLwjgl)
     compileOnly(libs.joml)
@@ -48,6 +47,7 @@ dependencies {
     compileOnly(libs.jspecify)
 
     localRuntime(libs.modMenu)
+    localRuntime(libs.uselessNumerical)
     val lwjglVer = libs.versions.lwjgl.get()
     localRuntime(platform("org.lwjgl:lwjgl-bom:${lwjglVer}"))
     localRuntime("org.lwjgl:lwjgl::$lwjglNatives")
@@ -112,7 +112,6 @@ tasks {
             "version" to modVersion,
             "fabricloader" to libs.versions.loader.get(),
             "halplibe" to libs.versions.halplibe.get(),
-            "uselessnumerical" to libs.versions.uselessNumerical.get(),
             "java" to libs.versions.java.get(),
             "modmenu" to libs.versions.modMenu.get()
         )
