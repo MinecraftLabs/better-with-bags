@@ -60,11 +60,6 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
     }
 
     @Override
-    public int betterWithBags$getBackpackSlotStartIndex() {
-        return this.bwb$backpackSlotStartIndex;
-    }
-
-    @Override
     public int betterWithBags$getBackpackRows() {
         return this.bwb$backpackRows;
     }
