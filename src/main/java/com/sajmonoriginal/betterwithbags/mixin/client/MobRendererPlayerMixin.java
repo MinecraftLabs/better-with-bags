@@ -2,6 +2,7 @@ package com.sajmonoriginal.betterwithbags.mixin.client;
 
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
+import com.sajmonoriginal.betterwithbags.render.BackpackGeometry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.entity.MobRenderer;
@@ -23,15 +24,6 @@ import org.useless.dragonfly.models.entity.StaticEntityModel;
 public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 
     @Unique
-    private static final String TEXTURE_PATH = "/assets/betterwithbags/textures/entity/";
-    @Unique
-    private static final String GEOMETRY_ID = "geometry.humanoid.armor.bag";
-    @Unique
-    private static final String BEDROLL_GEOMETRY_ID = "geometry.bag.bedroll";
-    @Unique
-    private static final String BEDROLL_TEXTURE = TEXTURE_PATH + "bedroll_attachment.png";
-
-    @Unique
     private static final int BWB_ANIM_LAYER = 5;
 
     @Shadow
@@ -39,11 +31,6 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 
     protected MobRendererPlayerMixin(float shadowSize) {
         super(shadowSize);
-    }
-
-    @Unique
-    private String bwb$getTexture(BackpackTier tier) {
-        return TEXTURE_PATH + "backpack_" + tier.getName() + ".png";
     }
 
     @Inject(method = "renderAdditional(Lnet/minecraft/client/render/tessellator/TessellatorGeneral;Lnet/minecraft/core/entity/player/Player;F)V",
@@ -55,9 +42,9 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
         }
 
         BackpackTier tier = ((ItemBackpack) backpackStack.getItem()).getTier();
-        bwb$renderPart(player, partialTick, GEOMETRY_ID, bwb$getTexture(tier));
+        bwb$renderPart(player, partialTick, BackpackGeometry.WORN, BackpackGeometry.getWornTexture(tier));
         if (ItemBackpack.hasAttachment(backpackStack)) {
-            bwb$renderPart(player, partialTick, BEDROLL_GEOMETRY_ID, BEDROLL_TEXTURE);
+            bwb$renderPart(player, partialTick, BackpackGeometry.BEDROLL, BackpackGeometry.BEDROLL_TEXTURE);
         }
     }
 
