@@ -11,8 +11,6 @@ import com.sajmonoriginal.betterwithbags.slot.SlotBackpackAttachment;
 import com.sajmonoriginal.betterwithbags.util.BackpackMenuCapable;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;
-import net.minecraft.core.enums.HumanArmorShape;
-import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.container.Container;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 import net.minecraft.core.player.inventory.menu.MenuInventory;
@@ -103,15 +101,12 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
             return;
         }
 
-        ItemStack chestSlot = inventory.player.inventory.armorInventory[HumanArmorShape.CHEST.getSlotIndex()];
-        boolean hasBackpack = chestSlot != null && chestSlot.getItem() instanceof ItemBackpack;
-
-        if (!hasBackpack) {
+        ItemBackpack backpack = ItemBackpack.getWornBackpack(inventory.player);
+        if (backpack == null) {
             hideBackpackSlots();
             return;
         }
 
-        ItemBackpack backpack = (ItemBackpack) chestSlot.getItem();
         BackpackTier tier = backpack.getTier();
         int capacity = tier.getSlots();
         int rows = tier.getRows();

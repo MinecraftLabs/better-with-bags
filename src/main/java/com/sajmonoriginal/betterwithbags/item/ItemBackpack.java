@@ -120,24 +120,17 @@ public class ItemBackpack extends Item implements IArmorItem<HumanArmorShape> {
     }
 
     public static boolean isWearingBackpack(Player player) {
-        ItemStack chestSlot = player.inventory.armorInventory[HumanArmorShape.CHEST.getSlotIndex()];
-        return chestSlot != null && chestSlot.getItem() instanceof ItemBackpack;
+        return getWornBackpackStack(player) != null;
     }
 
     public static ItemBackpack getWornBackpack(Player player) {
-        ItemStack chestSlot = player.inventory.armorInventory[HumanArmorShape.CHEST.getSlotIndex()];
-        if (chestSlot != null && chestSlot.getItem() instanceof ItemBackpack) {
-            return (ItemBackpack) chestSlot.getItem();
-        }
-        return null;
+        ItemStack backpackStack = getWornBackpackStack(player);
+        return backpackStack != null ? (ItemBackpack) backpackStack.getItem() : null;
     }
 
     public static ItemStack getWornBackpackStack(Player player) {
-        ItemStack chestSlot = player.inventory.armorInventory[HumanArmorShape.CHEST.getSlotIndex()];
-        if (chestSlot != null && chestSlot.getItem() instanceof ItemBackpack) {
-            return chestSlot;
-        }
-        return null;
+        ItemStack chestSlot = player.getItemInArmorSlot(HumanArmorShape.CHEST);
+        return chestSlot != null && chestSlot.getItem() instanceof ItemBackpack ? chestSlot : null;
     }
 
     public static ItemStack[] getBackpackContents(ItemStack backpackStack) {
