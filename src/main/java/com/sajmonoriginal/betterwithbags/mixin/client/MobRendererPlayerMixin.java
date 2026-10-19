@@ -47,7 +47,7 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
     }
 
     @Inject(method = "renderAdditional(Lnet/minecraft/client/render/tessellator/TessellatorGeneral;Lnet/minecraft/core/entity/player/Player;F)V",
-            at = @At("TAIL"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/core/entity/player/Player;getHeldObject()Lnet/minecraft/core/world/ICarriable;"))
     private void bwb$renderBackpackOnBack(TessellatorGeneral tessellator, Player player, float partialTick, CallbackInfo ci) {
         ItemStack backpackStack = ItemBackpack.getWornBackpackStack(player);
         if (backpackStack == null) {
