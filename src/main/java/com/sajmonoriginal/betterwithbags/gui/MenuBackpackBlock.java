@@ -14,10 +14,6 @@ public class MenuBackpackBlock extends MenuBackpackBase {
         addBackpackSlots(tileEntity, new SlotAttachmentBlock(tileEntity, 178, 18), playerInventory);
     }
 
-    public TileEntityBackpack getTileEntity() {
-        return tileEntity;
-    }
-
     @Override
     public boolean stillValid(Player player) {
         return tileEntity.stillValid(player);

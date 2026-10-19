@@ -1,60 +1,25 @@
 package com.sajmonoriginal.betterwithbags.gui;
 
-import com.sajmonoriginal.betterwithbags.BetterWithBagsMod;
 import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
 import com.sajmonoriginal.betterwithbags.item.BackpackItems;
-import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.renderer.GLRenderer;
-import net.minecraft.client.render.renderer.State;
 import net.minecraft.core.item.ItemStack;
-import net.minecraft.core.lang.I18n;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 
 @Environment(EnvType.CLIENT)
-public class ScreenBackpackBlock extends ScreenBackpackResponsive {
-    private static final String GUI_TEXTURE_BASE = "/assets/" + BetterWithBagsMod.MOD_ID + "/textures/gui/backpack_";
-
-    private final MenuBackpackBlock container;
-    private final int rows;
-    private final String guiTexture;
+public class ScreenBackpackBlock extends ScreenBackpackBase {
+    private final TileEntityBackpack tileEntity;
 
     public ScreenBackpackBlock(ContainerInventory playerInventory, TileEntityBackpack tileEntity) {
         super(new MenuBackpackBlock(playerInventory, tileEntity));
-        this.container = (MenuBackpackBlock) this.inventorySlots;
-        this.rows = container.getRows();
-        BackpackTier tier = container.getTier();
-        boolean hasAttachmentSlot = tier.supportsAttachment();
-        this.xSize = hasAttachmentSlot ? 199 : 176;
-        this.ySize = 121 + rows * 18;
-        this.guiTexture = GUI_TEXTURE_BASE + tier.getName() + ".png";
+        this.tileEntity = tileEntity;
     }
 
     @Override
-    public void drawGuiContainerBackgroundLayer(float partialTicks) {
-        GLRenderer.enableState(State.BLEND);
-        GLRenderer.setColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.textureManager.loadTexture(guiTexture).bind();
-
-        int guiLeft = (this.width - this.xSize) / 2;
-        int guiTop = (this.height - this.ySize) / 2;
-
-        this.drawTexturedModalRect(guiLeft, guiTop + rows * 18 + 17, 0, 118, 176, 103);
-        this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, 176, rows * 18 + 17 + 7);
-
-        BackpackTier tier = container.getTier();
-        if (tier.supportsAttachment()) {
-            this.drawTexturedModalRect(guiLeft + 174, guiTop + 13, 174, 13, 25, 26);
-        }
-    }
-
-    @Override
-    public void drawGuiContainerForegroundLayer() {
-        ItemStack namedStack = BackpackItems.getItemForTier(container.getTier()).getDefaultStack();
-        namedStack.setCustomName(container.getTileEntity().getCustomName());
-        String title = namedStack.getDisplayName();
-        this.fontRenderer.render(title, 8, 6).setColor(0xFFFFFF).call();
-        this.fontRenderer.render(I18n.getInstance().translateKey("container.inventory.name"), 8, this.ySize - 96 + 2).setColor(0x404040).call();
+    protected String getTitle() {
+        ItemStack namedStack = BackpackItems.getItemForTier(menu.getTier()).getDefaultStack();
+        namedStack.setCustomName(tileEntity.getCustomName());
+        return namedStack.getDisplayName();
     }
 }
