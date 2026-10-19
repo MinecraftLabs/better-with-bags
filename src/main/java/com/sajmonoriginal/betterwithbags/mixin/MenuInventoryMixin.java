@@ -35,8 +35,6 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
 
     @Unique
     private static final int HIDDEN_Y = -9999;
-    @Unique
-    private static final int HOTBAR_SLOTS_START = 36;
 
     @Unique
     private boolean bwb$hasBackpackSlots = false;
@@ -69,10 +67,6 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
     @Override
     public int betterWithBags$getBackpackRows() {
         return this.bwb$backpackRows;
-    }
-
-    public int getHotbarSlotId(int number) {
-        return HOTBAR_SLOTS_START + number - 1;
     }
 
     @Inject(method = "<init>(Lnet/minecraft/core/player/inventory/container/ContainerInventory;)V",
