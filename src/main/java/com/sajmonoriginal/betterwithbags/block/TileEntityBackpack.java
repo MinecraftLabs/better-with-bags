@@ -174,9 +174,10 @@ public class TileEntityBackpack extends TileEntity implements Container {
             }
         }
 
-        this.contents = new ItemStack[tier.getSlots()];
-
-        if (tag.containsKey("BackpackInventory")) {
+        if (!tag.containsKey("BackpackInventory")) {
+            setTier(tier);
+        } else {
+            this.contents = new ItemStack[tier.getSlots()];
             ListTag itemList = tag.getList("BackpackInventory");
             for (int i = 0; i < itemList.tagCount(); i++) {
                 CompoundTag itemTag = (CompoundTag) itemList.tagAt(i);
