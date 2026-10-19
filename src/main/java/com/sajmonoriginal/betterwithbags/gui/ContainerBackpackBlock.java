@@ -58,6 +58,10 @@ public class ContainerBackpackBlock extends MenuAbstract {
         return tier;
     }
 
+    public TileEntityBackpack getTileEntity() {
+        return tileEntity;
+    }
+
     private int getAttachmentSlot() {
         return tier.supportsAttachment() ? capacity : -1;
     }

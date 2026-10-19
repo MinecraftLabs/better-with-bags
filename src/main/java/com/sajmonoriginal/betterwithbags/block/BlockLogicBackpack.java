@@ -123,6 +123,7 @@ public class BlockLogicBackpack extends BlockLogic {
         if (backpackTE.hasAttachment()) {
             ItemBackpack.setAttachment(stack, backpackTE.getAttachment());
         }
+        stack.setCustomName(backpackTE.getCustomName());
 
         backpackTE.clearContents();
         return stack;

@@ -99,6 +99,7 @@ public class ItemBackpack extends Item implements IArmorItem {
             if (attachment != null) {
                 backpackTE.setAttachment(attachment);
             }
+            backpackTE.setCustomName(itemstack.getCustomName());
         }
 
         itemstack.stackSize--;

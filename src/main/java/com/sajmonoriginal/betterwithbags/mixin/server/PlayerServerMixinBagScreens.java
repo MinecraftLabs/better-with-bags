@@ -39,7 +39,7 @@ public abstract class PlayerServerMixinBagScreens implements BagScreens {
     public void betterWithBags$displayBackpackBlockScreen(TileEntityBackpack tileEntity) {
         this.getNextWindowId();
         PlayerServer playerServer = (PlayerServer) (Object) this;
-        NetworkHandler.sendToPlayer(playerServer, OpenBackpackScreenMessage.placed(this.currentWindowId, tileEntity.getTier()));
+        NetworkHandler.sendToPlayer(playerServer, OpenBackpackScreenMessage.placed(this.currentWindowId, tileEntity.getTier(), tileEntity.getCustomName()));
         playerServer.containerMenu.onCraftGuiClosed(playerServer);
         playerServer.containerMenu = new ContainerBackpackBlock(playerServer.inventory, tileEntity);
         playerServer.containerMenu.containerId = this.currentWindowId;

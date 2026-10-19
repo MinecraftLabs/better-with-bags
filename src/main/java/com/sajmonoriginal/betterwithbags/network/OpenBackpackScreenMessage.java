@@ -17,6 +17,7 @@ public class OpenBackpackScreenMessage implements NetworkMessage {
     private boolean placed;
     private BackpackTier tier = BackpackTier.SMALL;
     private int slot = -1;
+    private String customName = "";
 
     public OpenBackpackScreenMessage() {
     }
@@ -30,11 +31,12 @@ public class OpenBackpackScreenMessage implements NetworkMessage {
         return message;
     }
 
-    public static OpenBackpackScreenMessage placed(int windowId, BackpackTier tier) {
+    public static OpenBackpackScreenMessage placed(int windowId, BackpackTier tier, String customName) {
         OpenBackpackScreenMessage message = new OpenBackpackScreenMessage();
         message.windowId = windowId;
         message.placed = true;
         message.tier = tier;
+        message.customName = customName == null ? "" : customName;
         return message;
     }
 
@@ -44,6 +46,7 @@ public class OpenBackpackScreenMessage implements NetworkMessage {
         packet.writeBoolean(placed);
         packet.writeEnumConstant(tier);
         packet.writeInt(slot);
+        packet.writeString(customName);
     }
 
     @Override
@@ -52,6 +55,7 @@ public class OpenBackpackScreenMessage implements NetworkMessage {
         placed = packet.readBoolean();
         tier = packet.readEnumConstant(BackpackTier.class);
         slot = packet.readInt();
+        customName = packet.readString();
     }
 
     @Environment(EnvType.CLIENT)
@@ -66,6 +70,7 @@ public class OpenBackpackScreenMessage implements NetworkMessage {
         if (placed) {
             TileEntityBackpack tileEntity = new TileEntityBackpack();
             tileEntity.setTier(tier);
+            tileEntity.setCustomName(customName);
             screens.betterWithBags$displayBackpackBlockScreen(tileEntity);
         } else {
             ItemStack stack = slot >= 0 && slot < player.inventory.mainInventory.length

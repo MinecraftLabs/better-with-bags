@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.renderer.GLRenderer;
 import net.minecraft.client.render.renderer.State;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.lang.I18n;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 
@@ -50,7 +51,9 @@ public class ScreenBackpackBlock extends ScreenBackpackResponsive {
 
     @Override
     public void drawGuiContainerForegroundLayer() {
-        String title = BackpackItems.getItemForTier(container.getTier()).getDefaultStack().getDisplayName();
+        ItemStack namedStack = BackpackItems.getItemForTier(container.getTier()).getDefaultStack();
+        namedStack.setCustomName(container.getTileEntity().getCustomName());
+        String title = namedStack.getDisplayName();
         this.fontRenderer.render(title, 8, 6).setColor(0xFFFFFF).call();
         this.fontRenderer.render(I18n.getInstance().translateKey("container.inventory.name"), 8, this.ySize - 96 + 2).setColor(0x404040).call();
     }

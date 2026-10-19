@@ -18,6 +18,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
     private ItemStack[] contents;
     private BackpackTier tier;
     private ItemStack attachment;
+    private String customName;
 
     public TileEntityBackpack() {
         this.tier = BackpackTier.SMALL;
@@ -49,6 +50,14 @@ public class TileEntityBackpack extends TileEntity implements Container {
 
     public boolean hasAttachment() {
         return attachment != null;
+    }
+
+    public String getCustomName() {
+        return customName;
+    }
+
+    public void setCustomName(String customName) {
+        this.customName = customName == null || customName.isEmpty() ? null : customName;
     }
 
     public void clearContents() {
@@ -147,6 +156,8 @@ public class TileEntityBackpack extends TileEntity implements Container {
         if (tag.containsKey("Attachment")) {
             this.attachment = ItemStack.readItemStackFromNbt(tag.getCompound("Attachment"));
         }
+
+        setCustomName(tag.containsKey("CustomName") ? tag.getString("CustomName") : null);
     }
 
     @Override
@@ -168,6 +179,10 @@ public class TileEntityBackpack extends TileEntity implements Container {
             CompoundTag attachmentTag = new CompoundTag();
             attachment.writeToNBT(attachmentTag);
             tag.put("Attachment", attachmentTag);
+        }
+
+        if (customName != null) {
+            tag.putString("CustomName", customName);
         }
     }
 
