@@ -8,6 +8,8 @@ import net.minecraft.client.render.renderer.GLRenderer;
 import net.minecraft.client.render.renderer.State;
 import net.minecraft.client.render.tessellator.TessellatorGeneral;
 import net.minecraft.client.render.tileentity.TileEntityRenderer;
+import net.minecraft.core.block.BlockLogicBed;
+import net.minecraft.core.util.helper.Side;
 
 @Environment(EnvType.CLIENT)
 public class TileEntityRendererBedroll extends TileEntityRenderer<TileEntityBedroll> {
@@ -19,20 +21,12 @@ public class TileEntityRendererBedroll extends TileEntityRenderer<TileEntityBedr
         }
 
         int direction = tileEntity.getDirection();
-
-        float footDx, footDz;
-        switch (direction) {
-            case 0: footDx =  0; footDz = -1; break;
-            case 1: footDx =  1; footDz =  0; break;
-            case 2: footDx =  0; footDz =  1; break;
-            case 3: footDx = -1; footDz =  0; break;
-            default: footDx = 0; footDz = 0; break;
-        }
+        Side footToHead = BlockLogicBed.footToHeadMap[direction];
 
         GLRenderer.pushFrame();
 
-        GLRenderer.modelM4f().translate((float) x + 0.5f + footDx, (float) y, (float) z + 0.5f + footDz);
-        GLRenderer.modelM4f().rotateY((float) Math.toRadians(getRotation(direction)));
+        GLRenderer.modelM4f().translate((float) x + 0.5f - footToHead.offsetX(), (float) y, (float) z + 0.5f - footToHead.offsetZ());
+        GLRenderer.modelM4f().rotateY((float) Math.toRadians((4 - direction) % 4 * 90f));
         GLRenderer.modelM4f().translate(-0.5f, 0.0f, -0.5f);
 
         GLRenderer.enableState(State.BLEND);
@@ -45,15 +39,5 @@ public class TileEntityRendererBedroll extends TileEntityRenderer<TileEntityBedr
         GLRenderer.enableState(State.CULL_FACE);
         GLRenderer.disableState(State.BLEND);
         GLRenderer.popFrame();
-    }
-
-    private float getRotation(int direction) {
-        switch (direction) {
-            case 0: return 0f;
-            case 1: return 270f;
-            case 2: return 180f;
-            case 3: return 90f;
-            default: return 0f;
-        }
     }
 }
