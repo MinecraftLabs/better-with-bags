@@ -2,6 +2,7 @@ package com.sajmonoriginal.betterwithbags.gui;
 
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.InventorySorter;
 import net.minecraft.core.player.inventory.container.Container;
 
 public abstract class ContainerBackpackContents implements Container {
@@ -73,5 +74,8 @@ public abstract class ContainerBackpackContents implements Container {
 
     @Override
     public void sort() {
+        refresh();
+        InventorySorter.sortInventory(contents);
+        setChanged();
     }
 }
