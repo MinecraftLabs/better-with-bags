@@ -1,16 +1,15 @@
 package com.sajmonoriginal.betterwithbags.gui;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public interface ResponsiveBackpackScreen {
-    AtomicBoolean MOUSE_ALREADY_TRANSFORMED = new AtomicBoolean(false);
-    AtomicBoolean RENDERING_RESPONSIVE = new AtomicBoolean(false);
-
     boolean betterWithBags$hasResponsiveLayout();
 
-    boolean betterWithBags$isRenderingResponsive();
+    float betterWithBags$getGuiScale();
 
-    int betterWithBags$transformMouseX(int mouseX);
+    float betterWithBags$getContentCenterX();
 
-    int betterWithBags$transformMouseY(int mouseY);
+    float betterWithBags$getContentCenterY();
+
+    boolean betterWithBags$isRenderingScaled();
+
+    void betterWithBags$setRenderingScaled(boolean scaled);
 }

@@ -20,6 +20,7 @@
 		"client.ScreenContainerAbstractMixin",
 		"client.ScreenInventoryMixin",
 		"client.ScreenInventoryCreativeMixin",
-		"client.ScreenMixinResponsiveBackground"
+		"client.ScreenMixin",
+		"client.WorldRendererMixin"
 	]
 }

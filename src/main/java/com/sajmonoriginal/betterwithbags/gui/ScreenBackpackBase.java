@@ -15,7 +15,7 @@ public abstract class ScreenBackpackBase extends ScreenContainerAbstract impleme
 
     protected final MenuBackpackBase menu;
     private final String guiTexture;
-    private boolean renderingResponsive;
+    private boolean renderingScaled;
 
     protected ScreenBackpackBase(MenuBackpackBase menu) {
         super(menu);
@@ -59,54 +59,35 @@ public abstract class ScreenBackpackBase extends ScreenContainerAbstract impleme
         }
     }
 
-    private float getGuiScale() {
+    @Override
+    public boolean betterWithBags$hasResponsiveLayout() {
+        return betterWithBags$getGuiScale() < 1.0F;
+    }
+
+    @Override
+    public float betterWithBags$getGuiScale() {
         float horizontalScale = (this.width - SCREEN_MARGIN * 2) / (float) this.xSize;
         float verticalScale = (this.height - SCREEN_MARGIN * 2) / (float) this.ySize;
         return Math.min(1.0F, Math.min(horizontalScale, verticalScale));
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        float scale = getGuiScale();
-        if (scale >= 1.0F) {
-            super.render(mouseX, mouseY, partialTicks);
-            return;
-        }
-
-        this.renderBackground();
-        GLRenderer.pushFrame();
-        GLRenderer.modelM4f()
-            .translate(this.width / 2.0F, this.height / 2.0F, 0.0F)
-            .scale(scale, scale, 1.0F)
-            .translate(-this.width / 2.0F, -this.height / 2.0F, 0.0F);
-        this.renderingResponsive = true;
-        try {
-            super.render(betterWithBags$transformMouseX(mouseX), betterWithBags$transformMouseY(mouseY), partialTicks);
-        } finally {
-            this.renderingResponsive = false;
-            GLRenderer.popFrame();
-        }
+    public float betterWithBags$getContentCenterX() {
+        return this.width / 2.0F;
     }
 
     @Override
-    public boolean betterWithBags$hasResponsiveLayout() {
-        return getGuiScale() < 1.0F;
+    public float betterWithBags$getContentCenterY() {
+        return this.height / 2.0F;
     }
 
     @Override
-    public boolean betterWithBags$isRenderingResponsive() {
-        return this.renderingResponsive;
+    public boolean betterWithBags$isRenderingScaled() {
+        return this.renderingScaled;
     }
 
     @Override
-    public int betterWithBags$transformMouseX(int mouseX) {
-        float scale = getGuiScale();
-        return Math.round(this.width / 2.0F + (mouseX - this.width / 2.0F) / scale);
-    }
-
-    @Override
-    public int betterWithBags$transformMouseY(int mouseY) {
-        float scale = getGuiScale();
-        return Math.round(this.height / 2.0F + (mouseY - this.height / 2.0F) / scale);
+    public void betterWithBags$setRenderingScaled(boolean scaled) {
+        this.renderingScaled = scaled;
     }
 }

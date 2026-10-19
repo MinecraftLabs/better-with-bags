@@ -11,7 +11,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.container.ScreenContainerAbstract;
 import net.minecraft.client.gui.container.ScreenInventory;
 import net.minecraft.client.gui.container.ScreenInventoryCreative;
-import net.minecraft.client.render.renderer.GLRenderer;
 import net.minecraft.core.player.inventory.menu.MenuAbstract;
 import net.minecraft.core.player.inventory.menu.MenuInventory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,7 +35,7 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
     @Unique
     private BackpackTier bwb$currentTier = null;
     @Unique
-    private boolean bwb$renderingResponsive = false;
+    private boolean bwb$renderingScaled = false;
 
     protected ScreenInventoryMixin(MenuAbstract menu) {
         super(menu);
@@ -88,33 +87,6 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
         }
     }
 
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void bwb$renderResponsive(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        if ((Object) this instanceof ScreenInventoryCreative ||
-            this.bwb$renderingResponsive || !betterWithBags$hasResponsiveLayout()) {
-            return;
-        }
-
-        this.renderBackground();
-        GLRenderer.pushFrame();
-        float scale = bwb$getGuiScale();
-        GLRenderer.modelM4f()
-            .translate(this.width / 2, this.height / 2, 0.0F)
-            .scale(scale, scale, 1.0F)
-            .translate(-bwb$getContentCenterX(), -bwb$getContentCenterY(), 0.0F);
-        this.bwb$renderingResponsive = true;
-        try {
-            ((ScreenInventory) (Object) this).render(
-                betterWithBags$transformMouseX(mouseX),
-                betterWithBags$transformMouseY(mouseY),
-                partialTicks);
-        } finally {
-            this.bwb$renderingResponsive = false;
-            GLRenderer.popFrame();
-        }
-        ci.cancel();
-    }
-
     @Unique
     private int bwb$getContentWidth() {
         if ((Object) this instanceof ScreenInventoryCreative) {
@@ -130,18 +102,6 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
     }
 
     @Unique
-    private int bwb$getContentCenterX() {
-        int guiLeft = (this.width - this.xSize) / 2;
-        return guiLeft + bwb$getContentWidth() / 2;
-    }
-
-    @Unique
-    private int bwb$getContentCenterY() {
-        int guiTop = (this.height - this.ySize) / 2;
-        return guiTop + bwb$getContentHeight() / 2;
-    }
-
-    @Unique
     private boolean bwb$contentOverflowsCurrentPosition() {
         int guiLeft = (this.width - this.xSize) / 2;
         int guiTop = (this.height - this.ySize) / 2;
@@ -151,13 +111,6 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
             guiTop + bwb$getContentHeight() > this.height - SCREEN_MARGIN;
     }
 
-    @Unique
-    private float bwb$getGuiScale() {
-        float horizontalScale = (this.width - SCREEN_MARGIN * 2) / (float) bwb$getContentWidth();
-        float verticalScale = (this.height - SCREEN_MARGIN * 2) / (float) bwb$getContentHeight();
-        return Math.min(1.0F, Math.min(horizontalScale, verticalScale));
-    }
-
     @Override
     public boolean betterWithBags$hasResponsiveLayout() {
         return this.bwb$backpackRows > 0 && this.bwb$currentTier != null &&
@@ -165,18 +118,30 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
     }
 
     @Override
-    public boolean betterWithBags$isRenderingResponsive() {
-        return this.bwb$renderingResponsive;
+    public float betterWithBags$getGuiScale() {
+        float horizontalScale = (this.width - SCREEN_MARGIN * 2) / (float) bwb$getContentWidth();
+        float verticalScale = (this.height - SCREEN_MARGIN * 2) / (float) bwb$getContentHeight();
+        return Math.min(1.0F, Math.min(horizontalScale, verticalScale));
     }
 
     @Override
-    public int betterWithBags$transformMouseX(int mouseX) {
-        return Math.round(bwb$getContentCenterX() + (mouseX - this.width / 2) / bwb$getGuiScale());
+    public float betterWithBags$getContentCenterX() {
+        return (this.width - this.xSize) / 2 + bwb$getContentWidth() / 2;
     }
 
     @Override
-    public int betterWithBags$transformMouseY(int mouseY) {
-        return Math.round(bwb$getContentCenterY() + (mouseY - this.height / 2) / bwb$getGuiScale());
+    public float betterWithBags$getContentCenterY() {
+        return (this.height - this.ySize) / 2 + bwb$getContentHeight() / 2;
+    }
+
+    @Override
+    public boolean betterWithBags$isRenderingScaled() {
+        return this.bwb$renderingScaled;
+    }
+
+    @Override
+    public void betterWithBags$setRenderingScaled(boolean scaled) {
+        this.bwb$renderingScaled = scaled;
     }
 
     @Inject(method = "drawGuiContainerBackgroundLayer", at = @At("HEAD"))
