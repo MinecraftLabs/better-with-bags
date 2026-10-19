@@ -4,10 +4,14 @@ import com.mojang.nbt.tags.CompoundTag;
 import com.mojang.nbt.tags.ListTag;
 import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
 import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
+import com.sajmonoriginal.betterwithbags.gui.BagScreens;
+import net.minecraft.core.block.Block;
 import net.minecraft.core.block.entity.TileEntity;
 import net.minecraft.core.entity.player.Player;
+import net.minecraft.core.enums.EnumBlockSoundEffectType;
 import net.minecraft.core.enums.HumanArmorShape;
 import net.minecraft.core.item.IArmorItem;
+import net.minecraft.core.item.IPlaceable;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.item.block.ItemBlock;
@@ -15,6 +19,7 @@ import net.minecraft.core.item.material.ArmorMaterial;
 import net.minecraft.core.util.helper.Direction;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
+import net.minecraft.core.world.pos.TilePos;
 import net.minecraft.core.world.pos.TilePosc;
 
 import java.util.ArrayList;
@@ -50,10 +55,8 @@ public class ItemBackpack extends Item implements IArmorItem {
 
     @Override
     public ItemStack onUse(ItemStack itemStack, World world, Player player) {
-        if (!player.isSneaking()) {
-            if (!world.isClientSide) {
-                ((com.sajmonoriginal.betterwithbags.gui.BagScreens) player).betterWithBags$displayBackpackScreen(itemStack);
-            }
+        if (!player.isSneaking() && !world.isClientSide) {
+            ((BagScreens) player).betterWithBags$displayBackpackScreen(itemStack);
         }
         return itemStack;
     }
@@ -62,35 +65,34 @@ public class ItemBackpack extends Item implements IArmorItem {
     public boolean onUseOnBlock(ItemStack itemstack, World world, Player player, TilePosc pos, Side side, double xOffset, double yOffset) {
         if (!player.isSneaking()) {
             if (!world.isClientSide) {
-                ((com.sajmonoriginal.betterwithbags.gui.BagScreens) player).betterWithBags$displayBackpackScreen(itemstack);
+                ((BagScreens) player).betterWithBags$displayBackpackScreen(itemstack);
             }
             return true;
         }
 
-        int placeX = pos.x() + side.offsetX();
-        int placeY = pos.y() + side.offsetY();
-        int placeZ = pos.z() + side.offsetZ();
-
-        if (!world.isAirBlock(placeX, placeY, placeZ)) {
+        Block<?> block = BackpackBlocks.getBlockForTier(this.tier);
+        TilePosc placePos = IPlaceable.shouldShiftBlockOutOf(block, world, pos) ? pos.add(side, new TilePos()) : pos;
+        if (!IPlaceable.canPlaceBlockDirectlyAtPosition(block, world, placePos, side)) {
             return false;
         }
-
         if (world.isClientSide) {
             return true;
         }
 
-        int blockId = BackpackBlocks.getBlockForTier(this.tier).id();
         Direction facing = player.getHorizontalPlacementDirection(side).opposite();
-        world.setBlockAndMetadataWithNotify(placeX, placeY, placeZ, blockId, facing.id);
+        if (!world.setBlockTypeDataNotify(placePos, block, facing.id)) {
+            return false;
+        }
 
-        TileEntity te = world.getTileEntity(placeX, placeY, placeZ);
+        TileEntity te = world.getTileEntity(placePos);
         if (te instanceof TileEntityBackpack) {
             TileEntityBackpack backpackTE = (TileEntityBackpack) te;
             backpackTE.setTier(this.tier);
             backpackTE.loadFromItem(itemstack);
         }
 
-        itemstack.stackSize--;
+        world.playBlockSoundEffect(player, placePos.x() + 0.5, placePos.y() + 0.5, placePos.z() + 0.5, block, EnumBlockSoundEffectType.PLACE);
+        itemstack.consumeItem(player);
         return true;
     }
 
