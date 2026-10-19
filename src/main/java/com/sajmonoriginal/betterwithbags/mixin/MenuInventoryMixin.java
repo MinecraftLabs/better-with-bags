@@ -1,7 +1,7 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.sajmonoriginal.betterwithbags.gui.WornBackpackContainer;
+import com.sajmonoriginal.betterwithbags.gui.ContainerWornBackpack;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.sajmonoriginal.betterwithbags.mixin.accessor.MenuAbstractAccessor;
@@ -61,7 +61,7 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
     private SlotBackpackAttachment bwb$attachmentSlot = null;
 
     @Unique
-    private WornBackpackContainer bwb$backpackContainer = null;
+    private ContainerWornBackpack bwb$backpackContainer = null;
 
     @Override
     public boolean betterWithBags$hasBackpackSlots() {
@@ -88,7 +88,7 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
         MenuInventory self = (MenuInventory) (Object) this;
         this.bwb$backpackSlotStartIndex = self.slots.size();
 
-        bwb$backpackContainer = new WornBackpackContainer(inventory);
+        bwb$backpackContainer = new ContainerWornBackpack(inventory);
 
         int maxCapacity = BackpackTier.REINFORCED.getSlots();
         for (int i = 0; i < maxCapacity; i++) {

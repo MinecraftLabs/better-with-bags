@@ -1,8 +1,9 @@
 package com.sajmonoriginal.betterwithbags.gui;
 
+import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
-import com.sajmonoriginal.betterwithbags.slot.SlotAttachment;
+import com.sajmonoriginal.betterwithbags.slot.SlotAttachmentBlock;
 import com.sajmonoriginal.betterwithbags.slot.SlotBackpackItem;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;
@@ -13,35 +14,29 @@ import net.minecraft.core.player.inventory.slot.Slot;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
 
-public class ContainerBackpack extends MenuAbstract {
+public class MenuBackpackBlock extends MenuAbstract {
+    private final TileEntityBackpack tileEntity;
     private final BackpackTier tier;
     private final int rows;
     private final int capacity;
-    private final BackpackInventoryContainer backpackContainer;
-    private final ContainerInventory playerInventory;
-    private final int heldSlotIndex;
-    private final int heldMenuSlot;
 
-    public ContainerBackpack(ContainerInventory playerInventory, ItemStack backpackStack) {
-        this.playerInventory = playerInventory;
-        this.heldSlotIndex = playerInventory.getCurrentSlot();
-        ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
-        this.tier = backpack.getTier();
+    public MenuBackpackBlock(ContainerInventory playerInventory, TileEntityBackpack tileEntity) {
+        this.tileEntity = tileEntity;
+        this.tier = tileEntity.getTier();
         this.rows = tier.getRows();
         this.capacity = tier.getSlots();
-        this.backpackContainer = new BackpackInventoryContainer(playerInventory, heldSlotIndex);
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < 9; col++) {
                 int slotIndex = row * 9 + col;
                 if (slotIndex < capacity) {
-                    this.addSlot(new SlotBackpackItem(backpackContainer, slotIndex, 8 + col * 18, 18 + row * 18));
+                    this.addSlot(new SlotBackpackItem(tileEntity, slotIndex, 8 + col * 18, 18 + row * 18));
                 }
             }
         }
 
         if (tier.supportsAttachment()) {
-            this.addSlot(new SlotAttachment(playerInventory, heldSlotIndex, 178, 18));
+            this.addSlot(new SlotAttachmentBlock(tileEntity, 178, 18));
         }
 
         int playerInvY = 17 + rows * 18 + 22;
@@ -55,9 +50,6 @@ public class ContainerBackpack extends MenuAbstract {
         for (int col = 0; col < 9; col++) {
             this.addSlot(new Slot(playerInventory, col, 8 + col * 18, hotbarY));
         }
-
-        Slot heldSlot = this.getSlotFor(playerInventory, heldSlotIndex);
-        this.heldMenuSlot = heldSlot != null ? heldSlot.index : -1;
     }
 
     public int getRows() {
@@ -68,8 +60,8 @@ public class ContainerBackpack extends MenuAbstract {
         return tier;
     }
 
-    public ItemStack getBackpackStack() {
-        return playerInventory.mainInventory[heldSlotIndex];
+    public TileEntityBackpack getTileEntity() {
+        return tileEntity;
     }
 
     private int getAttachmentSlot() {
@@ -81,33 +73,7 @@ public class ContainerBackpack extends MenuAbstract {
     }
 
     @Override
-    public ItemStack clicked(InventoryAction action, int[] args, Player player) {
-        if (args != null && args.length > 0 && touchesHeldBackpack(action, args)) {
-            return null;
-        }
-        return super.clicked(action, args, player);
-    }
-
-    private boolean touchesHeldBackpack(InventoryAction action, int[] args) {
-        if (action == InventoryAction.DRAG_ITEMS_ALL || action == InventoryAction.DRAG_ITEMS_ONE
-            || action == InventoryAction.CREATIVE_DRAG || action == InventoryAction.PICKUP_SIMILAR) {
-            return false;
-        }
-        if (args[0] == heldMenuSlot) {
-            return true;
-        }
-        return action == InventoryAction.HOTBAR_ITEM_SWAP && args.length > 1
-            && args[1] >= 1 && args[1] <= 9 && getHotbarSlotId(args[1]) == heldMenuSlot;
-    }
-
-    @Override
     public IntList getMoveSlots(InventoryAction action, Slot slot, int target, Player player) {
-        IntList moveSlots = getMoveSlotsUnfiltered(action, slot);
-        moveSlots.rem(heldMenuSlot);
-        return moveSlots;
-    }
-
-    private IntList getMoveSlotsUnfiltered(InventoryAction action, Slot slot) {
         int attachmentSlot = getAttachmentSlot();
         int playerStart = getPlayerSlotStart();
         if (slot.index < capacity) {
@@ -154,28 +120,7 @@ public class ContainerBackpack extends MenuAbstract {
     }
 
     @Override
-    public void broadcastChanges() {
-        if (!isBackpackInSlot()) {
-            return;
-        }
-        backpackContainer.flush();
-        super.broadcastChanges();
-    }
-
-    @Override
-    public void onCraftGuiClosed(Player player) {
-        super.onCraftGuiClosed(player);
-        backpackContainer.flush();
-    }
-
-    @Override
     public boolean stillValid(Player player) {
-        return isBackpackInSlot();
-    }
-
-    private boolean isBackpackInSlot() {
-        ItemStack current = playerInventory.mainInventory[heldSlotIndex];
-        return current != null && current.getItem() instanceof ItemBackpack &&
-            ((ItemBackpack) current.getItem()).getTier() == this.tier;
+        return tileEntity.stillValid(player);
     }
 }

@@ -1,6 +1,6 @@
 package com.sajmonoriginal.betterwithbags.slot;
 
-import com.sajmonoriginal.betterwithbags.gui.WornBackpackContainer;
+import com.sajmonoriginal.betterwithbags.gui.ContainerWornBackpack;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
@@ -11,7 +11,7 @@ public class SlotBackpack extends Slot {
     private final ContainerInventory playerInventory;
     private final int backpackSlotIndex;
 
-    public SlotBackpack(WornBackpackContainer container, ContainerInventory inventory, int backpackSlot, int x, int y) {
+    public SlotBackpack(ContainerWornBackpack container, ContainerInventory inventory, int backpackSlot, int x, int y) {
         super(container, backpackSlot, x, y);
         this.playerInventory = inventory;
         this.backpackSlotIndex = backpackSlot;

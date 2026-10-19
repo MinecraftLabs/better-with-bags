@@ -1,7 +1,7 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
-import com.sajmonoriginal.betterwithbags.gui.ContainerBackpack;
-import com.sajmonoriginal.betterwithbags.gui.ContainerBackpackBlock;
+import com.sajmonoriginal.betterwithbags.gui.MenuBackpack;
+import com.sajmonoriginal.betterwithbags.gui.MenuBackpackBlock;
 import com.sajmonoriginal.betterwithbags.util.BackpackMenuCapable;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.item.ItemStack;
@@ -51,7 +51,7 @@ public abstract class MenuAbstractMixin {
     @Unique
     private boolean bwb$hasBackpackSlots() {
         Object self = this;
-        if (self instanceof ContainerBackpack || self instanceof ContainerBackpackBlock) {
+        if (self instanceof MenuBackpack || self instanceof MenuBackpackBlock) {
             return true;
         }
         return self instanceof BackpackMenuCapable && ((BackpackMenuCapable) self).betterWithBags$hasBackpackSlots();

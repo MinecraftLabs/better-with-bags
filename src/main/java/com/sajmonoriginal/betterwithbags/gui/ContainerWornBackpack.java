@@ -7,13 +7,13 @@ import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.container.Container;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 
-public class WornBackpackContainer implements Container {
+public class ContainerWornBackpack implements Container {
     private final ContainerInventory playerInventory;
     private ItemStack[] contents;
     private ItemStack trackedBackpackStack;
     private int capacity;
 
-    public WornBackpackContainer(ContainerInventory playerInventory) {
+    public ContainerWornBackpack(ContainerInventory playerInventory) {
         this.playerInventory = playerInventory;
         this.contents = new ItemStack[0];
         this.capacity = 0;

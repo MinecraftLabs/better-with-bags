@@ -2,8 +2,8 @@ package com.sajmonoriginal.betterwithbags.mixin.server;
 
 import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
 import com.sajmonoriginal.betterwithbags.gui.BagScreens;
-import com.sajmonoriginal.betterwithbags.gui.ContainerBackpack;
-import com.sajmonoriginal.betterwithbags.gui.ContainerBackpackBlock;
+import com.sajmonoriginal.betterwithbags.gui.MenuBackpack;
+import com.sajmonoriginal.betterwithbags.gui.MenuBackpackBlock;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.sajmonoriginal.betterwithbags.network.OpenBackpackScreenMessage;
 import net.fabricmc.api.EnvType;
@@ -30,7 +30,7 @@ public abstract class PlayerServerMixinBagScreens implements BagScreens {
         NetworkHandler.sendToPlayer(playerServer, OpenBackpackScreenMessage.held(this.currentWindowId,
             playerServer.inventory.getCurrentSlot(), ((ItemBackpack) backpackStack.getItem()).getTier()));
         playerServer.containerMenu.onCraftGuiClosed(playerServer);
-        playerServer.containerMenu = new ContainerBackpack(playerServer.inventory, backpackStack);
+        playerServer.containerMenu = new MenuBackpack(playerServer.inventory, backpackStack);
         playerServer.containerMenu.containerId = this.currentWindowId;
         playerServer.containerMenu.addSlotListener(playerServer);
     }
@@ -41,7 +41,7 @@ public abstract class PlayerServerMixinBagScreens implements BagScreens {
         PlayerServer playerServer = (PlayerServer) (Object) this;
         NetworkHandler.sendToPlayer(playerServer, OpenBackpackScreenMessage.placed(this.currentWindowId, tileEntity.getTier(), tileEntity.getCustomName()));
         playerServer.containerMenu.onCraftGuiClosed(playerServer);
-        playerServer.containerMenu = new ContainerBackpackBlock(playerServer.inventory, tileEntity);
+        playerServer.containerMenu = new MenuBackpackBlock(playerServer.inventory, tileEntity);
         playerServer.containerMenu.containerId = this.currentWindowId;
         playerServer.containerMenu.addSlotListener(playerServer);
     }

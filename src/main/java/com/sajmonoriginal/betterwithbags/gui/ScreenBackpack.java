@@ -15,13 +15,13 @@ import net.minecraft.core.player.inventory.container.ContainerInventory;
 public class ScreenBackpack extends ScreenBackpackResponsive {
     private static final String GUI_TEXTURE_BASE = "/assets/" + BetterWithBagsMod.MOD_ID + "/textures/gui/backpack_";
 
-    private final ContainerBackpack container;
+    private final MenuBackpack container;
     private final int rows;
     private final String guiTexture;
 
     public ScreenBackpack(ContainerInventory playerInventory, ItemStack backpackStack) {
-        super(new ContainerBackpack(playerInventory, backpackStack));
-        this.container = (ContainerBackpack) this.inventorySlots;
+        super(new MenuBackpack(playerInventory, backpackStack));
+        this.container = (MenuBackpack) this.inventorySlots;
         this.rows = container.getRows();
         BackpackTier tier = container.getTier();
         boolean hasAttachmentSlot = tier.supportsAttachment();

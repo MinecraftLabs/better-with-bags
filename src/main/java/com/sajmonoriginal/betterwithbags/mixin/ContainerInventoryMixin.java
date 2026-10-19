@@ -1,6 +1,6 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
-import com.sajmonoriginal.betterwithbags.gui.ContainerBackpack;
+import com.sajmonoriginal.betterwithbags.gui.MenuBackpack;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 import org.spongepowered.asm.mixin.Final;
@@ -18,7 +18,7 @@ public abstract class ContainerInventoryMixin {
 
     @Inject(method = "currentSlotLocked", at = @At("HEAD"), cancellable = true)
     private void bwb$lockOpenBackpackSlot(CallbackInfoReturnable<Boolean> cir) {
-        if (this.player != null && this.player.containerMenu instanceof ContainerBackpack) {
+        if (this.player != null && this.player.containerMenu instanceof MenuBackpack) {
             cir.setReturnValue(true);
         }
     }
