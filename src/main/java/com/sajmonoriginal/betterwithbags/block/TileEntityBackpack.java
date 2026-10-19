@@ -178,7 +178,12 @@ public class TileEntityBackpack extends TileEntity implements Container {
 
     @Override
     public Packet getDescriptionPacket() {
-        return new PacketTileEntityData(this);
+        CompoundTag tag = new CompoundTag();
+        writeToNBT(tag);
+        tag.getValue().remove("BackpackInventory");
+        PacketTileEntityData packet = new PacketTileEntityData(tag);
+        packet.isChunkDataPacket = true;
+        return packet;
     }
 
 }
