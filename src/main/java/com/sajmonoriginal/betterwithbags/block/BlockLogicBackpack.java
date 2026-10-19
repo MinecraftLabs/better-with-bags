@@ -1,6 +1,6 @@
 package com.sajmonoriginal.betterwithbags.block;
 
-import com.sajmonoriginal.betterwithbags.gui.BagScreens;
+import com.sajmonoriginal.betterwithbags.gui.BackpackGuis;
 import com.sajmonoriginal.betterwithbags.item.BackpackItems;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import net.minecraft.core.block.Block;
@@ -93,7 +93,7 @@ public class BlockLogicBackpack extends BlockLogic {
         }
 
         if (!world.isClientSide) {
-            ((BagScreens) player).betterWithBags$displayBackpackBlockScreen(backpackTE);
+            BackpackGuis.openPlaced(player, backpackTE);
         }
         return true;
     }

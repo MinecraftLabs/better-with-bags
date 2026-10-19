@@ -151,9 +151,6 @@ public class TileEntityBackpack extends TileEntity implements Container {
 
     @Override
     public boolean stillValid(Player player) {
-        if (worldObj == null) {
-            return true;
-        }
         if (worldObj.getTileEntity(tilePos) != this) {
             return false;
         }

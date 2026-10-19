@@ -10,8 +10,8 @@ import net.minecraft.core.player.inventory.container.ContainerInventory;
 public class ScreenBackpack extends ScreenBackpackBase {
     private final MenuBackpack backpackMenu;
 
-    public ScreenBackpack(ContainerInventory playerInventory, ItemStack backpackStack) {
-        this(new MenuBackpack(playerInventory, backpackStack));
+    public ScreenBackpack(ContainerInventory playerInventory, int slotIndex, boolean isArmor) {
+        this(new MenuBackpack(playerInventory, slotIndex, isArmor));
     }
 
     private ScreenBackpack(MenuBackpack menu) {

@@ -12,7 +12,6 @@
 		"MenuAbstractMixin",
 		"MenuInventoryMixin",
 		"PlayerMixin",
-		"PlayerMixinBagScreens",
 		"accessor.MenuAbstractAccessor"
 	],
 	"client": [
@@ -20,13 +19,9 @@
 		"client.HudComponentArmorBarMixin",
 		"client.MobRendererPlayerMixin",
 		"client.MobRendererPlayerArmorMixin",
-		"client.PlayerLocalMixinBagScreens",
 		"client.ScreenContainerAbstractMixin",
 		"client.ScreenInventoryMixin",
 		"client.ScreenInventoryCreativeMixin",
 		"client.ScreenMixinResponsiveBackground"
-	],
-	"server": [
-		"server.PlayerServerMixinBagScreens"
 	]
 }

@@ -11,12 +11,12 @@ public class ContainerHeldBackpack extends ContainerBackpackContents {
     private final int slotIndex;
     private final BackpackTier tier;
 
-    public ContainerHeldBackpack(ContainerInventory playerInventory, int slotIndex) {
+    public ContainerHeldBackpack(ContainerInventory playerInventory, int slotIndex, BackpackTier tier) {
         this.playerInventory = playerInventory;
         this.slotIndex = slotIndex;
-        ItemStack backpackStack = playerInventory.mainInventory[slotIndex];
-        this.tier = ((ItemBackpack) backpackStack.getItem()).getTier();
-        this.contents = ItemBackpack.getBackpackContents(backpackStack);
+        this.tier = tier;
+        ItemStack backpackStack = getBackpackStack();
+        this.contents = backpackStack != null ? ItemBackpack.getBackpackContents(backpackStack) : new ItemStack[tier.getSlots()];
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.gui;
 
+import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.sajmonoriginal.betterwithbags.slot.SlotAttachment;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -15,15 +16,20 @@ public class MenuBackpack extends MenuBackpackBase {
     private final int heldSlotIndex;
     private final int heldMenuSlot;
 
-    public MenuBackpack(ContainerInventory playerInventory, ItemStack backpackStack) {
-        super(((ItemBackpack) backpackStack.getItem()).getTier());
+    public MenuBackpack(ContainerInventory playerInventory, int slotIndex, boolean isArmor) {
+        super(getTierAt(playerInventory, slotIndex));
         this.playerInventory = playerInventory;
-        this.heldSlotIndex = playerInventory.getCurrentSlot();
-        this.backpackContainer = new ContainerHeldBackpack(playerInventory, heldSlotIndex);
+        this.heldSlotIndex = slotIndex;
+        this.backpackContainer = new ContainerHeldBackpack(playerInventory, slotIndex, tier);
         addBackpackSlots(backpackContainer, new SlotAttachment(playerInventory, heldSlotIndex, 178, 18), playerInventory);
 
         Slot heldSlot = this.getSlotFor(playerInventory, heldSlotIndex);
         this.heldMenuSlot = heldSlot != null ? heldSlot.index : -1;
+    }
+
+    private static BackpackTier getTierAt(ContainerInventory playerInventory, int slotIndex) {
+        ItemStack stack = playerInventory.mainInventory[slotIndex];
+        return stack != null && stack.getItem() instanceof ItemBackpack ? ((ItemBackpack) stack.getItem()).getTier() : BackpackTier.SMALL;
     }
 
     public ItemStack getBackpackStack() {

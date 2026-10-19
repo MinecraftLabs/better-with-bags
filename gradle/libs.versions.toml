@@ -13,6 +13,7 @@ btaChannel = "release"
 loader = "0.18.4-bta.11"
 modMenu = "5.0.2"
 halplibe = "6.2.0+8.0.1"
+catalystCore = "3.0.5"
 uselessNumerical = "1.1.1-8.0"
 legacyLwjgl = "1.0.6"
 jspecify = "1.0.0"
@@ -27,6 +28,7 @@ jomlPrimitives = "1.10.0"
 [libraries]
 loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "loader" }
 halplibe = { group = "turniplabs", name = "halplibe", version.ref = "halplibe" }
+catalystCore = { group = "sunsetsatellite", name = "catalyst-core", version.ref = "catalystCore" }
 modMenu = { group = "turniplabs", name = "modmenu-bta", version.ref = "modMenu" }
 uselessNumerical = { group = "maven.modrinth", name = "dVlGo8FN", version.ref = "uselessNumerical" }
 legacyLwjgl = { group = "com.github.Better-than-Adventure", name = "legacy-lwjgl3", version.ref = "legacyLwjgl" }

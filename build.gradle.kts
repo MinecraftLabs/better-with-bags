@@ -39,6 +39,7 @@ dependencies {
 
     implementation(libs.loader)
     implementation(libs.halplibe)
+    implementation(libs.catalystCore)
 
     compileOnly(libs.bundles.btaLwjgl)
     compileOnly(libs.joml)
@@ -112,6 +113,7 @@ tasks {
             "version" to modVersion,
             "fabricloader" to libs.versions.loader.get(),
             "halplibe" to libs.versions.halplibe.get(),
+            "catalystcore" to libs.versions.catalystCore.get(),
             "java" to libs.versions.java.get(),
             "modmenu" to libs.versions.modMenu.get()
         )

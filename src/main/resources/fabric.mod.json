@@ -23,6 +23,9 @@
 		],
 		"client": [
 			"com.sajmonoriginal.betterwithbags.BetterWithBagsClientMod"
+		],
+		"server": [
+			"com.sajmonoriginal.betterwithbags.BetterWithBagsServerMod"
 		]
 	},
 	"mixins": [
@@ -31,6 +34,7 @@
 	"depends": {
 		"fabricloader": ">=${fabricloader}",
 		"halplibe": ">=${halplibe}",
+		"catalyst-core": ">=${catalystcore}",
 		"minecraft": "*",
 		"java": ">=${java}"
 	},
