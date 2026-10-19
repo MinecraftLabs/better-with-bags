@@ -14,7 +14,6 @@ import net.minecraft.client.render.tileentity.TileEntityRenderer;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.util.helper.Direction;
 import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
-import org.useless.dragonfly.models.entity.StaticEntityModel;
 
 @Environment(EnvType.CLIENT)
 public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBackpack> {
@@ -23,23 +22,6 @@ public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBac
     private static final String PLACED_GEOMETRY_ID = "geometry.bag.placed";
     private static final String BEDROLL_GEOMETRY_ID = "geometry.bag.bedroll";
     private static final String BEDROLL_TEXTURE = TEXTURE_PATH + "bedroll_attachment.png";
-
-    private static StaticEntityModel placedModel;
-    private static StaticEntityModel bedrollModel;
-
-    private StaticEntityModel getModel() {
-        if (placedModel == null) {
-            placedModel = EntityGeometryMojangData.Cache.getModel(PLACED_GEOMETRY_ID, 0);
-        }
-        return placedModel;
-    }
-
-    private StaticEntityModel getBedrollModel() {
-        if (bedrollModel == null) {
-            bedrollModel = EntityGeometryMojangData.Cache.getModel(BEDROLL_GEOMETRY_ID, 0);
-        }
-        return bedrollModel;
-    }
 
     private String getTexture(BackpackTier tier) {
         return TEXTURE_PATH + "backpack_placed_" + tier.getName() + ".png";
@@ -66,12 +48,6 @@ public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBac
 
     @Override
     public void doRender(TessellatorGeneral tessellator, TileEntityBackpack tileEntity, double x, double y, double z, float partialTick) {
-        boolean hasBedroll = tileEntity.hasAttachment();
-        StaticEntityModel backpackModel = getModel();
-        if (backpackModel == null) {
-            return;
-        }
-
         BackpackTier tier = getDisplayTier(tileEntity);
         int meta = tileEntity.getBlockMeta();
         float rotation = getRotationFromMeta(meta);
@@ -90,14 +66,11 @@ public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBac
         GLRenderer.setColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
         bindTexture(getTexture(tier));
-        backpackModel.render();
+        EntityGeometryMojangData.Cache.getModel(PLACED_GEOMETRY_ID, 0).render();
 
-        if (hasBedroll) {
-            StaticEntityModel bedroll = getBedrollModel();
-            if (bedroll != null) {
-                bindTexture(BEDROLL_TEXTURE);
-                bedroll.render();
-            }
+        if (tileEntity.hasAttachment()) {
+            bindTexture(BEDROLL_TEXTURE);
+            EntityGeometryMojangData.Cache.getModel(BEDROLL_GEOMETRY_ID, 0).render();
         }
 
         GLRenderer.enableState(State.CULL_FACE);

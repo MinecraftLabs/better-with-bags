@@ -8,7 +8,6 @@ import net.minecraft.client.render.entity.MobRenderer;
 import net.minecraft.client.render.entity.MobRendererPlayer;
 import net.minecraft.client.render.tessellator.TessellatorGeneral;
 import net.minecraft.core.entity.player.Player;
-import net.minecraft.core.enums.HumanArmorShape;
 import net.minecraft.core.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -50,32 +49,24 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
     @Inject(method = "renderAdditional(Lnet/minecraft/client/render/tessellator/TessellatorGeneral;Lnet/minecraft/core/entity/player/Player;F)V",
             at = @At("TAIL"))
     private void bwb$renderBackpackOnBack(TessellatorGeneral tessellator, Player player, float partialTick, CallbackInfo ci) {
-        ItemStack chestSlot = player.inventory.armorInventory[HumanArmorShape.CHEST.getSlotIndex()];
-        if (chestSlot == null || !(chestSlot.getItem() instanceof ItemBackpack)) {
+        ItemStack backpackStack = ItemBackpack.getWornBackpackStack(player);
+        if (backpackStack == null) {
             return;
         }
 
-        ItemBackpack backpackItem = (ItemBackpack) chestSlot.getItem();
-        BackpackTier tier = backpackItem.getTier();
-
-        StaticEntityModel backpackModel = EntityGeometryMojangData.Cache.getModel(GEOMETRY_ID, 0);
-        if (backpackModel != null) {
-            StaticEntityModel bound = this.setupAnimations(player, backpackModel, partialTick, BWB_ANIM_LAYER);
-            if (bound != null) {
-                this.renderDispatcher.textureManager.loadTexture(bwb$getTexture(tier)).bind();
-                bound.render();
-            }
+        BackpackTier tier = ((ItemBackpack) backpackStack.getItem()).getTier();
+        bwb$renderPart(player, partialTick, GEOMETRY_ID, bwb$getTexture(tier));
+        if (ItemBackpack.hasAttachment(backpackStack)) {
+            bwb$renderPart(player, partialTick, BEDROLL_GEOMETRY_ID, BEDROLL_TEXTURE);
         }
+    }
 
-        if (ItemBackpack.hasAttachment(chestSlot)) {
-            StaticEntityModel bedrollModel = EntityGeometryMojangData.Cache.getModel(BEDROLL_GEOMETRY_ID, 0);
-            if (bedrollModel != null) {
-                StaticEntityModel bound = this.setupAnimations(player, bedrollModel, partialTick, BWB_ANIM_LAYER);
-                if (bound != null) {
-                    this.renderDispatcher.textureManager.loadTexture(BEDROLL_TEXTURE).bind();
-                    bound.render();
-                }
-            }
+    @Unique
+    private void bwb$renderPart(Player player, float partialTick, String geometryId, String texture) {
+        StaticEntityModel model = this.setupAnimations(player, EntityGeometryMojangData.Cache.getModel(geometryId, 0), partialTick, BWB_ANIM_LAYER);
+        if (model != null) {
+            this.renderDispatcher.textureManager.loadTexture(texture).bind();
+            model.render();
         }
     }
 }
