@@ -5,11 +5,9 @@ import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
-import net.minecraft.core.net.packet.PacketContainerSetSlot;
 import net.minecraft.core.player.inventory.container.ContainerInventory;
 import net.minecraft.core.player.inventory.menu.MenuAbstract;
 import net.minecraft.core.player.inventory.slot.Slot;
-import net.minecraft.server.entity.player.PlayerServer;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
 
@@ -157,17 +155,6 @@ public class ContainerBackpack extends MenuAbstract {
     public void onCraftGuiClosed(Player player) {
         super.onCraftGuiClosed(player);
         backpackContainer.flush();
-        if (player.world != null && !player.world.isClientSide) {
-            syncHeldItemToClient(player);
-        }
-    }
-
-    private void syncHeldItemToClient(Player player) {
-        PlayerServer serverPlayer = (PlayerServer) player;
-        serverPlayer.playerNetServerHandler.sendPacket(
-            new PacketContainerSetSlot(0, serverPlayer.inventoryMenu.getStateId(), heldSlotIndex + 36,
-                player.inventory.mainInventory[heldSlotIndex])
-        );
     }
 
     @Override
