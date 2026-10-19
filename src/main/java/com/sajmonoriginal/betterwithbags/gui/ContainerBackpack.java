@@ -38,10 +38,7 @@ public class ContainerBackpack extends MenuAbstract {
             }
         }
 
-        boolean supportsAttachment = tier == BackpackTier.LARGE ||
-                                      tier == BackpackTier.REINFORCED ||
-                                      tier == BackpackTier.NETHER;
-        if (supportsAttachment) {
+        if (tier.supportsAttachment()) {
             this.addSlot(new SlotAttachment(playerInventory, heldSlotIndex, 178, 18));
         }
 
@@ -67,6 +64,14 @@ public class ContainerBackpack extends MenuAbstract {
 
     public BackpackTier getTier() {
         return tier;
+    }
+
+    private int getAttachmentSlot() {
+        return tier.supportsAttachment() ? capacity : -1;
+    }
+
+    private int getPlayerSlotStart() {
+        return tier.supportsAttachment() ? capacity + 1 : capacity;
     }
 
     @Override
@@ -97,8 +102,8 @@ public class ContainerBackpack extends MenuAbstract {
     }
 
     private IntList getMoveSlotsUnfiltered(InventoryAction action, Slot slot) {
-        int attachmentSlot = capacity;
-        int playerStart = capacity + 1;
+        int attachmentSlot = getAttachmentSlot();
+        int playerStart = getPlayerSlotStart();
         if (slot.index < capacity) {
             return this.getSlots(slot.index, 1, false);
         }
@@ -118,8 +123,8 @@ public class ContainerBackpack extends MenuAbstract {
 
     @Override
     public IntList getTargetSlots(InventoryAction action, Slot slot, int target, Player player) {
-        int attachmentSlot = capacity;
-        int playerStart = capacity + 1;
+        int attachmentSlot = getAttachmentSlot();
+        int playerStart = getPlayerSlotStart();
         if (slot.index < capacity) {
             return this.getSlots(playerStart, 36, false);
         }

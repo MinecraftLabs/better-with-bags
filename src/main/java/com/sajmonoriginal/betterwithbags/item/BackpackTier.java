@@ -41,4 +41,8 @@ public enum BackpackTier {
         return this == NETHER;
     }
 
+    public boolean supportsAttachment() {
+        return this == LARGE || this == REINFORCED || this == NETHER;
+    }
+
 }
