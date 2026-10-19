@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
+import com.sajmonoriginal.betterwithbags.block.BlockLogicBedroll;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.sajmonoriginal.betterwithbags.util.BedrollSleepTracker;
 import net.minecraft.core.entity.Entity;
@@ -64,21 +65,12 @@ public abstract class PlayerMixin extends Entity {
         }
     }
 
-    @Inject(method = "wakeUpPlayer", at = @At("HEAD"))
-    private void bwb$clearBedrollSleepFlag(boolean flag1, boolean flag2, CallbackInfo ci) {
-        Player self = (Player) (Object) this;
-        BedrollSleepTracker.clearSleepingInBedroll(self);
-    }
-
     @Inject(method = "setPlayerSleeping", at = @At("TAIL"))
     private void bwb$adjustBedrollSleepPosition(int x, int y, int z, CallbackInfo ci) {
-        if (this.world != null && this.world.isBlockLoaded(x, y, z)) {
-            net.minecraft.core.block.Block<?> block = this.world.getBlock(x, y, z);
-            if (block != null && block.getLogic() instanceof com.sajmonoriginal.betterwithbags.block.BlockLogicBedroll) {
-
-                this.setPos(this.x, (double) y + 0.5625, this.z);
-            }
+        TilePos pos = new TilePos(x, y, z);
+        if (this.world != null && this.world.isBlockLoaded(pos)
+            && this.world.getBlockType(pos).getLogic() instanceof BlockLogicBedroll) {
+            this.setPos(this.x, y + 0.5625, this.z);
         }
     }
-
 }
