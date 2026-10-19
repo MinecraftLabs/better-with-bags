@@ -1,17 +1,19 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
+import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
 import com.sajmonoriginal.betterwithbags.block.BlockLogicBedroll;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
-import com.sajmonoriginal.betterwithbags.util.BedrollSleepTracker;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.pos.TilePos;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = Player.class, remap = false)
@@ -40,24 +42,26 @@ public abstract class PlayerMixin extends Entity {
         this.speed *= (1.0f - fillRatio * maxPenalty);
     }
 
-    @Redirect(
+    @WrapWithCondition(
         method = "sleepInBedAt",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/core/entity/player/Player;sendStatusMessageTranslated(Ljava/lang/String;[Ljava/lang/String;)V")
     )
-    private void bwb$redirectSpawnMessage(Player self, String key, String[] args) {
-        if (!"messages.bed.setSpawn".equals(key) || !BedrollSleepTracker.isSleepingInBedroll(self)) {
-            self.sendStatusMessageTranslated(key, args);
-        }
+    private boolean bwb$skipBedrollSpawnMessage(Player self, String key, String[] args, @Local(argsOnly = true, ordinal = 0) int x,
+                                                @Local(argsOnly = true, ordinal = 1) int y, @Local(argsOnly = true, ordinal = 2) int z) {
+        return !"messages.bed.setSpawn".equals(key) || !bwb$isBedroll(x, y, z);
     }
 
-    @Redirect(
+    @WrapWithCondition(
         method = "sleepInBedAt",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/core/entity/player/Player;setPlayerSpawnPoint(Lnet/minecraft/core/world/pos/TilePos;)V")
     )
-    private void bwb$redirectSpawnSet(Player self, TilePos coords) {
-        if (!BedrollSleepTracker.isSleepingInBedroll(self)) {
-            self.setPlayerSpawnPoint(coords);
-        }
+    private boolean bwb$skipBedrollSpawnPoint(Player self, TilePos spawn) {
+        return !bwb$isBedroll(spawn.x, spawn.y, spawn.z);
+    }
+
+    @Unique
+    private boolean bwb$isBedroll(int x, int y, int z) {
+        return this.world.getBlockType(new TilePos(x, y, z)) == BackpackBlocks.BEDROLL_BLOCK;
     }
 
     @Inject(method = "setPlayerSleeping", at = @At("TAIL"))

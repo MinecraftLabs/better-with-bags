@@ -1,7 +1,6 @@
 package com.sajmonoriginal.betterwithbags.block;
 
 import com.sajmonoriginal.betterwithbags.item.BackpackItems;
-import com.sajmonoriginal.betterwithbags.util.BedrollSleepTracker;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockLogicBed;
 import net.minecraft.core.block.entity.TileEntity;
@@ -24,12 +23,7 @@ public class BlockLogicBedroll extends BlockLogicBed {
         if (world.isClientSide || !world.getWorldType().mayRespawn()) {
             return true;
         }
-        BedrollSleepTracker.markSleepingInBedroll(player);
-        try {
-            return super.onInteracted(world, pos, player, side, hitX, hitY);
-        } finally {
-            BedrollSleepTracker.clearSleepingInBedroll(player);
-        }
+        return super.onInteracted(world, pos, player, side, hitX, hitY);
     }
 
     @Override
