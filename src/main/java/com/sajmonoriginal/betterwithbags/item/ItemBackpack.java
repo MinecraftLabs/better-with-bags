@@ -17,6 +17,9 @@ import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.pos.TilePosc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemBackpack extends Item implements IArmorItem {
 
     private final BackpackTier tier;
@@ -211,6 +214,31 @@ public class ItemBackpack extends Item implements IArmorItem {
             if (item != null) return true;
         }
         return false;
+    }
+
+    public static void transferContents(ItemStack from, ItemStack to) {
+        to.setData(from.getData());
+        ItemStack[] source = getBackpackContents(from);
+        if (source == null || !(to.getItem() instanceof ItemBackpack)) {
+            return;
+        }
+
+        ItemStack[] contents = new ItemStack[((ItemBackpack) to.getItem()).getCapacity()];
+        List<ItemStack> overflow = new ArrayList<>();
+        for (int i = 0; i < source.length; i++) {
+            if (source[i] == null) continue;
+            if (i < contents.length) {
+                contents[i] = source[i];
+            } else {
+                overflow.add(source[i]);
+            }
+        }
+        for (int i = 0; i < contents.length && !overflow.isEmpty(); i++) {
+            if (contents[i] == null) {
+                contents[i] = overflow.remove(0);
+            }
+        }
+        setBackpackContents(to, contents);
     }
 
     public static int getOccupiedSlotCount(ItemStack backpackStack) {
