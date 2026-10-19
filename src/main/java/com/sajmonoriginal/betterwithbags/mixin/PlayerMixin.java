@@ -1,9 +1,9 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
-import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
-import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
+import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;

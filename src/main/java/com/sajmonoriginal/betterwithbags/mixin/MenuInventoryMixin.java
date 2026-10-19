@@ -9,6 +9,8 @@ import com.sajmonoriginal.betterwithbags.mixin.accessor.MenuAbstractAccessor;
 import com.sajmonoriginal.betterwithbags.slot.SlotBackpack;
 import com.sajmonoriginal.betterwithbags.slot.SlotBackpackAttachment;
 import com.sajmonoriginal.betterwithbags.util.BackpackMenuCapable;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.player.inventory.container.Container;
@@ -21,9 +23,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 
 import java.util.ArrayList;
 import java.util.List;

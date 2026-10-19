@@ -1,9 +1,9 @@
 package com.sajmonoriginal.betterwithbags.recipe;
 
-import com.sajmonoriginal.betterwithbags.BetterWithBagsMod;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.sajmonoriginal.betterwithbags.BetterWithBagsMod;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.data.registry.recipe.HasJsonAdapter;
 import net.minecraft.core.data.registry.recipe.RecipeSymbol;

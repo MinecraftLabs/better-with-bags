@@ -10,10 +10,10 @@ import com.sajmonoriginal.betterwithbags.gui.ScreenBackpackBlock;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import turniplabs.halplibe.event.defs.ClientEvents;
 import sunsetsatellite.catalyst.Catalyst;
 import sunsetsatellite.catalyst.core.util.mp.entry.ItemGuiEntry;
 import sunsetsatellite.catalyst.core.util.mp.entry.TileGuiEntry;
+import turniplabs.halplibe.event.defs.ClientEvents;
 import turniplabs.halplibe.util.dependency.Key;
 
 @Environment(EnvType.CLIENT)
