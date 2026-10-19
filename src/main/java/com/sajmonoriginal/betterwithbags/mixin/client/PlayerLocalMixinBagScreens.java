@@ -33,4 +33,9 @@ public abstract class PlayerLocalMixinBagScreens extends Player implements BagSc
     public void betterWithBags$displayBackpackBlockScreen(TileEntityBackpack tileEntity) {
         this.mc.displayScreen(new ScreenBackpackBlock(this.inventory, tileEntity));
     }
+
+    @Override
+    public void betterWithBags$closeBackpackScreen() {
+        this.closeScreen();
+    }
 }

@@ -2,11 +2,13 @@ package com.sajmonoriginal.betterwithbags;
 
 import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
 import com.sajmonoriginal.betterwithbags.item.BackpackItems;
+import com.sajmonoriginal.betterwithbags.network.OpenBackpackScreenMessage;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import turniplabs.halplibe.HalpLibe;
 import turniplabs.halplibe.event.defs.CommonEvents;
+import turniplabs.halplibe.helper.network.NetworkHandler;
 import turniplabs.halplibe.util.ConfigHandler;
 import turniplabs.halplibe.util.dependency.Key;
 
@@ -35,11 +37,9 @@ public class BetterWithBagsMod implements ModInitializer {
         CommonEvents.BEFORE_GAME_START.listen(key, BetterWithBagsMod::registerContent);
         CommonEvents.RECIPES_NAMESPACE_INIT.listen(key, BackpackRecipes::initNamespaces);
         CommonEvents.RECIPES_READY.listen(key, BackpackRecipes::registerRecipes);
+        NetworkHandler.registerNetworkMessage(OpenBackpackScreenMessage::new);
         LOGGER.info("Better With Bags initialized!");
     }
-
-    public static final int BACKPACK_SCREEN_ID = 20;
-    public static final int BACKPACK_BLOCK_SCREEN_ID = 21;
 
     private static void registerContent() {
         new BackpackItems().initializeItems();

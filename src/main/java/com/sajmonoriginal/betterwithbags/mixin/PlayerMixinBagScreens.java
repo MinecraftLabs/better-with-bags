@@ -15,4 +15,8 @@ public abstract class PlayerMixinBagScreens implements BagScreens {
     @Override
     public void betterWithBags$displayBackpackBlockScreen(TileEntityBackpack tileEntity) {
     }
+
+    @Override
+    public void betterWithBags$closeBackpackScreen() {
+    }
 }

@@ -22,7 +22,6 @@
 		"client.HudComponentArmorBarMixin",
 		"client.MobRendererPlayerMixin",
 		"client.MobRendererPlayerArmorMixin",
-		"client.PacketHandlerClientMixinBackpack",
 		"client.PlayerLocalMixinBagScreens",
 		"client.ScreenContainerAbstractMixin",
 		"client.ScreenInventoryMixin",
