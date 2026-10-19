@@ -1,30 +1,20 @@
 package com.sajmonoriginal.betterwithbags.render;
 
 import com.sajmonoriginal.betterwithbags.BetterWithBagsMod;
+import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
 import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.block.model.BlockModel;
-import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.client.render.renderer.BlendFactor;
 import net.minecraft.client.render.renderer.GLRenderer;
 import net.minecraft.client.render.renderer.State;
 import net.minecraft.client.render.tessellator.TessellatorGeneral;
-import net.minecraft.client.render.texture.stitcher.TextureRegistry;
 import net.minecraft.client.render.tileentity.TileEntityRenderer;
 import net.minecraft.core.block.Block;
-import net.minecraft.core.block.Blocks;
-import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
-import net.minecraft.core.item.ItemStack;
-import net.minecraft.core.item.block.ItemBlock;
 import net.minecraft.core.util.helper.Direction;
 import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
 import org.useless.dragonfly.models.entity.StaticEntityModel;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 
 @Environment(EnvType.CLIENT)
 public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBackpack> {
@@ -37,8 +27,6 @@ public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBac
     private static StaticEntityModel placedModel;
     private static StaticEntityModel bedrollModel;
 
-    private static boolean bedrollTextureChecked = false;
-    private static boolean bedrollTextureValid = false;
     private StaticEntityModel getModel() {
         if (placedModel == null) {
             placedModel = EntityGeometryMojangData.Cache.getModel(PLACED_GEOMETRY_ID, 0);
@@ -105,25 +93,10 @@ public class TileEntityRendererBackpack extends TileEntityRenderer<TileEntityBac
         backpackModel.render();
 
         if (hasBedroll) {
-            if (!bedrollTextureChecked) {
-                bedrollTextureChecked = true;
-                try {
-                    InputStream stream = TileEntityRendererBackpack.class.getResourceAsStream(BEDROLL_TEXTURE);
-                    if (stream != null) {
-                        BufferedImage testImg = ImageIO.read(stream);
-                        bedrollTextureValid = (testImg != null);
-                        stream.close();
-                    }
-                } catch (Exception e) {
-                    bedrollTextureValid = false;
-                }
-            }
-            if (bedrollTextureValid) {
-                StaticEntityModel bedroll = getBedrollModel();
-                if (bedroll != null) {
-                    bindTexture(BEDROLL_TEXTURE);
-                    bedroll.render();
-                }
+            StaticEntityModel bedroll = getBedrollModel();
+            if (bedroll != null) {
+                bindTexture(BEDROLL_TEXTURE);
+                bedroll.render();
             }
         }
 

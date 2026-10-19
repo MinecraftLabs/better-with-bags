@@ -150,11 +150,6 @@ public class ItemBackpack extends Item implements IArmorItem {
         return null;
     }
 
-    public static BackpackTier getWornTier(Player player) {
-        ItemBackpack backpack = getWornBackpack(player);
-        return backpack != null ? backpack.getTier() : null;
-    }
-
     public static ItemStack[] getBackpackContents(ItemStack backpackStack) {
         if (backpackStack == null || !(backpackStack.getItem() instanceof ItemBackpack)) {
             return null;
@@ -198,23 +193,6 @@ public class ItemBackpack extends Item implements IArmorItem {
 
         tag.put("BackpackInventory", itemList);
         backpackStack.setMetadata(0);
-    }
-
-    public static void setBackpackSlot(ItemStack backpackStack, int slot, ItemStack item) {
-        ItemStack[] contents = getBackpackContents(backpackStack);
-        if (contents != null && slot >= 0 && slot < contents.length) {
-            contents[slot] = item;
-            setBackpackContents(backpackStack, contents);
-        }
-    }
-
-    public static boolean hasItems(ItemStack backpackStack) {
-        ItemStack[] contents = getBackpackContents(backpackStack);
-        if (contents == null) return false;
-        for (ItemStack item : contents) {
-            if (item != null) return true;
-        }
-        return false;
     }
 
     public static void transferContents(ItemStack from, ItemStack to) {
