@@ -9,6 +9,7 @@
 		"ContainerInventoryMixin",
 		"EntityItemMixin",
 		"InventoryPlayerMixin",
+		"ItemStackMixin",
 		"MenuAbstractMixin",
 		"MenuInventoryMixin",
 		"PlayerMixin",
