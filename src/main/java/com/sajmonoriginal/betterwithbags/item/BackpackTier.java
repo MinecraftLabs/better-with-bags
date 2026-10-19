@@ -37,10 +37,6 @@ public enum BackpackTier {
         return speedMultiplier < 1.0f;
     }
 
-    public boolean isFireResistant() {
-        return this == NETHER;
-    }
-
     public String getNameTranslationKey() {
         return BackpackItems.getItemForTier(this).getKey() + ".name";
     }
