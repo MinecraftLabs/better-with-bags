@@ -62,6 +62,21 @@ public class BlockLogicBackpack extends BlockLogic {
     }
 
     @Override
+    public void onPlacedByWorld(World world, TilePosc pos) {
+        super.onPlacedByWorld(world, pos);
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileEntityBackpack) {
+            syncTier((TileEntityBackpack) te);
+        }
+    }
+
+    private void syncTier(TileEntityBackpack backpackTE) {
+        if (backpackTE.getTier() != this.tier) {
+            backpackTE.setTier(this.tier);
+        }
+    }
+
+    @Override
     public boolean onInteracted(World world, TilePosc pos, Player player, Side side, double hitX, double hitY) {
         TileEntity te = world.getTileEntity(pos);
         if (!(te instanceof TileEntityBackpack)) {
@@ -69,6 +84,7 @@ public class BlockLogicBackpack extends BlockLogic {
         }
 
         TileEntityBackpack backpackTE = (TileEntityBackpack) te;
+        syncTier(backpackTE);
 
         if (player.isSneaking()) {
             if (!world.isClientSide) {
