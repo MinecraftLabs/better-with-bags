@@ -25,7 +25,7 @@ import net.minecraft.core.world.pos.TilePosc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemBackpack extends Item implements IArmorItem {
+public class ItemBackpack extends Item implements IArmorItem<HumanArmorShape> {
 
     private final BackpackTier tier;
 

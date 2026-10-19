@@ -35,7 +35,7 @@ public class ItemModelPlacedBedroll extends ItemModelStandard {
     private static final float SIDE_V1 = 1f;
 
     public ItemModelPlacedBedroll(Item blockItem) {
-        super(blockItem, null);
+        super(blockItem, false);
         this.icon = TextureRegistry.getTexture(BetterWithBagsMod.MOD_ID + ":item/bedroll");
     }
 

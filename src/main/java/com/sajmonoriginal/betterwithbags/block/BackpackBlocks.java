@@ -38,12 +38,12 @@ public class BackpackBlocks {
 
         TileEntityDispatcher.addMapping(
             TileEntityBackpack.class,
-            NamespaceID.getPermanent(BetterWithBagsMod.MOD_ID, "backpack")
+            new NamespaceID(BetterWithBagsMod.MOD_ID, "backpack")
         );
 
         TileEntityDispatcher.addMapping(
             TileEntityBedroll.class,
-            NamespaceID.getPermanent(BetterWithBagsMod.MOD_ID, "bedroll")
+            new NamespaceID(BetterWithBagsMod.MOD_ID, "bedroll")
         );
     }
 

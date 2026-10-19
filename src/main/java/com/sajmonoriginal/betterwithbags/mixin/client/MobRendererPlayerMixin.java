@@ -23,9 +23,13 @@ import org.useless.dragonfly.models.entity.StaticEntityModel;
 @Mixin(value = MobRendererPlayer.class, remap = false)
 public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 
+    @Unique
     private static final String TEXTURE_PATH = "/assets/betterwithbags/textures/entity/";
+    @Unique
     private static final String GEOMETRY_ID = "geometry.humanoid.armor.bag";
+    @Unique
     private static final String BEDROLL_GEOMETRY_ID = "geometry.bag.bedroll";
+    @Unique
     private static final String BEDROLL_TEXTURE = TEXTURE_PATH + "bedroll_attachment.png";
 
     @Unique

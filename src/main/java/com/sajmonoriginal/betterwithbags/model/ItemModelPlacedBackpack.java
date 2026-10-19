@@ -29,7 +29,7 @@ public class ItemModelPlacedBackpack extends ItemModelStandard {
     private final String texture;
 
     public ItemModelPlacedBackpack(Item blockItem, BackpackTier tier) {
-        super(blockItem, null);
+        super(blockItem, false);
         this.tier = tier;
         this.texture = TEXTURE_PATH + "backpack_placed_" + tier.getName() + ".png";
         this.icon = TextureRegistry.getTexture(BetterWithBagsMod.MOD_ID + ":item/backpack_" + tier.getName());
