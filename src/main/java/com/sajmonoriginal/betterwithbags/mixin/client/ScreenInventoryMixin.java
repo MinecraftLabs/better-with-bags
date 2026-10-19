@@ -11,9 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.container.ScreenContainerAbstract;
 import net.minecraft.client.gui.container.ScreenInventory;
-import net.minecraft.client.gui.container.ScreenInventoryCreative;
 import net.minecraft.core.player.inventory.menu.MenuAbstract;
-import net.minecraft.core.player.inventory.menu.MenuInventory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,12 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ScreenInventoryMixin extends ScreenContainerAbstract implements ResponsiveBackpackScreen {
 
     @Unique
-    private int bwb$backpackRows = 0;
-    @Unique
-    private boolean bwb$lastHadBackpack = false;
-    @Unique
-    private BackpackTier bwb$lastTier = null;
-    @Unique
     private BackpackTier bwb$currentTier = null;
     @Unique
     private boolean bwb$renderingScaled = false;
@@ -40,63 +32,39 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
     }
 
     @Unique
-    private boolean bwb$hasBackpack() {
-        if (this.mc == null || this.mc.thePlayer == null) return false;
-        return ItemBackpack.isWearingBackpack(this.mc.thePlayer);
-    }
-
-    @Unique
-    private BackpackTier bwb$getCurrentTier() {
+    private BackpackTier bwb$getWornTier() {
         if (this.mc == null || this.mc.thePlayer == null) return null;
-        ItemBackpack backpack = ItemBackpack.getWornBackpack(this.mc.thePlayer);
-        return backpack != null ? backpack.getTier() : null;
+        return ItemBackpack.getBackpackTier(ItemBackpack.getWornBackpackStack(this.mc.thePlayer));
     }
 
     @Unique
     private void bwb$refreshBackpack() {
-        MenuInventory menu = (MenuInventory) this.inventorySlots;
-        BackpackMenuCapable backpackMenu = (BackpackMenuCapable) menu;
-        backpackMenu.betterWithBags$refreshBackpackSlots();
-
-        if (!bwb$hasBackpack()) {
-            this.bwb$backpackRows = 0;
-            this.bwb$currentTier = null;
-        } else {
-            this.bwb$backpackRows = backpackMenu.betterWithBags$getBackpackRows();
-            this.bwb$currentTier = bwb$getCurrentTier();
-        }
+        ((BackpackMenuCapable) this.inventorySlots).betterWithBags$refreshBackpackSlots();
+        this.bwb$currentTier = bwb$getWornTier();
     }
 
     @Inject(method = "init", at = @At("TAIL"))
     private void bwb$adjustHeight(CallbackInfo ci) {
-        this.bwb$lastHadBackpack = bwb$hasBackpack();
-        this.bwb$lastTier = bwb$getCurrentTier();
         bwb$refreshBackpack();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void bwb$checkBackpackChange(CallbackInfo ci) {
-        boolean hasBackpackNow = bwb$hasBackpack();
-        BackpackTier tierNow = bwb$getCurrentTier();
-        if (hasBackpackNow != this.bwb$lastHadBackpack || tierNow != this.bwb$lastTier) {
-            this.bwb$lastHadBackpack = hasBackpackNow;
-            this.bwb$lastTier = tierNow;
+        if (bwb$getWornTier() != this.bwb$currentTier) {
             bwb$refreshBackpack();
         }
     }
 
     @Unique
     private int bwb$getContentWidth() {
-        if ((Object) this instanceof ScreenInventoryCreative) {
-            return this.xSize;
-        }
-        return this.bwb$currentTier != null
+        int panelWidth = this.bwb$currentTier != null
             ? BackpackPanelLayout.getContentWidth(this.bwb$currentTier) : BackpackPanelLayout.PANEL_WIDTH;
+        return Math.max(this.xSize, panelWidth);
     }
 
     @Unique
     private int bwb$getContentHeight() {
-        return BackpackPanelLayout.getContentHeight(this.bwb$backpackRows);
+        return BackpackPanelLayout.getContentHeight(this.bwb$currentTier != null ? this.bwb$currentTier.getRows() : 0);
     }
 
     @Unique
@@ -112,8 +80,7 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
 
     @Override
     public boolean betterWithBags$hasResponsiveLayout() {
-        return this.bwb$backpackRows > 0 && this.bwb$currentTier != null &&
-            bwb$contentOverflowsCurrentPosition();
+        return this.bwb$currentTier != null && bwb$contentOverflowsCurrentPosition();
     }
 
     @Override
@@ -143,7 +110,7 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
 
     @Inject(method = "drawGuiContainerBackgroundLayer", at = @At("HEAD"))
     private void bwb$drawBackpackPanel(float partialTicks, CallbackInfo ci) {
-        if (this.bwb$backpackRows > 0 && this.bwb$currentTier != null) {
+        if (this.bwb$currentTier != null) {
             BackpackInventoryPanel.draw(this, this.bwb$currentTier, ItemBackpack.getWornBackpackStack(this.mc.thePlayer));
         }
     }

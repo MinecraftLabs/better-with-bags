@@ -59,11 +59,6 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
         return this.bwb$hasBackpackSlots;
     }
 
-    @Override
-    public int betterWithBags$getBackpackRows() {
-        return this.bwb$backpackRows;
-    }
-
     @Inject(method = "<init>(Lnet/minecraft/core/player/inventory/container/ContainerInventory;)V",
             at = @At("RETURN"))
     private void bwb$addBackpackSlotsInConstructor(ContainerInventory inventory, CallbackInfo ci) {
