@@ -1,7 +1,7 @@
 package com.sajmonoriginal.betterwithbags.block;
 
 import com.mojang.nbt.tags.CompoundTag;
-import com.mojang.nbt.tags.ListTag;
+import com.sajmonoriginal.betterwithbags.item.BackpackData;
 import com.sajmonoriginal.betterwithbags.item.BackpackItems;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
@@ -174,24 +174,12 @@ public class TileEntityBackpack extends TileEntity implements Container {
             }
         }
 
-        if (!tag.containsKey("BackpackInventory")) {
-            setTier(tier);
+        if (tag.containsKey(BackpackData.CONTENTS)) {
+            this.contents = BackpackData.readContents(tag, tier.getSlots());
         } else {
-            this.contents = new ItemStack[tier.getSlots()];
-            ListTag itemList = tag.getList("BackpackInventory");
-            for (int i = 0; i < itemList.tagCount(); i++) {
-                CompoundTag itemTag = (CompoundTag) itemList.tagAt(i);
-                int slot = itemTag.getByte("Slot") & 255;
-                if (slot < contents.length) {
-                    contents[slot] = ItemStack.readItemStackFromNbt(itemTag);
-                }
-            }
+            setTier(tier);
         }
-
-        this.attachment = null;
-        if (tag.containsKey("Attachment")) {
-            this.attachment = ItemStack.readItemStackFromNbt(tag.getCompound("Attachment"));
-        }
+        this.attachment = BackpackData.readAttachment(tag);
 
         setCustomName(tag.containsKey("CustomName") ? tag.getString("CustomName") : null);
     }
@@ -200,22 +188,8 @@ public class TileEntityBackpack extends TileEntity implements Container {
     public void writeAdditionalData(CompoundTag tag) {
         tag.putString("BackpackTier", tier.name());
 
-        ListTag itemList = new ListTag();
-        for (int i = 0; i < contents.length; i++) {
-            if (contents[i] != null) {
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putByte("Slot", (byte) i);
-                contents[i].writeToNBT(itemTag);
-                itemList.addTag(itemTag);
-            }
-        }
-        tag.put("BackpackInventory", itemList);
-
-        if (attachment != null) {
-            CompoundTag attachmentTag = new CompoundTag();
-            attachment.writeToNBT(attachmentTag);
-            tag.put("Attachment", attachmentTag);
-        }
+        BackpackData.writeContents(tag, contents);
+        BackpackData.writeAttachment(tag, attachment);
 
         if (customName != null) {
             tag.putString("CustomName", customName);
@@ -233,7 +207,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
     public Packet getDescriptionPacket() {
         CompoundTag tag = new CompoundTag();
         writeToNBT(tag);
-        tag.getValue().remove("BackpackInventory");
+        tag.getValue().remove(BackpackData.CONTENTS);
         PacketTileEntityData packet = new PacketTileEntityData(tag);
         packet.isChunkDataPacket = true;
         return packet;

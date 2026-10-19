@@ -1,7 +1,5 @@
 package com.sajmonoriginal.betterwithbags.item;
 
-import com.mojang.nbt.tags.CompoundTag;
-import com.mojang.nbt.tags.ListTag;
 import com.sajmonoriginal.betterwithbags.block.BackpackBlocks;
 import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
 import com.sajmonoriginal.betterwithbags.gui.BackpackGuis;
@@ -137,44 +135,14 @@ public class ItemBackpack extends Item implements IArmorItem<HumanArmorShape> {
         if (backpackStack == null || !(backpackStack.getItem() instanceof ItemBackpack)) {
             return null;
         }
-
-        ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
-        int capacity = backpack.getCapacity();
-        ItemStack[] contents = new ItemStack[capacity];
-
-        CompoundTag tag = backpackStack.getData();
-        if (tag.containsKey("BackpackInventory")) {
-            ListTag itemList = tag.getList("BackpackInventory");
-            for (int i = 0; i < itemList.tagCount(); i++) {
-                CompoundTag itemTag = (CompoundTag) itemList.tagAt(i);
-                int slot = itemTag.getByte("Slot") & 255;
-                if (slot < capacity) {
-                    contents[slot] = ItemStack.readItemStackFromNbt(itemTag);
-                }
-            }
-        }
-
-        return contents;
+        return BackpackData.readContents(backpackStack.getData(), ((ItemBackpack) backpackStack.getItem()).getCapacity());
     }
 
     public static void setBackpackContents(ItemStack backpackStack, ItemStack[] contents) {
         if (backpackStack == null || !(backpackStack.getItem() instanceof ItemBackpack)) {
             return;
         }
-
-        CompoundTag tag = backpackStack.getData();
-
-        ListTag itemList = new ListTag();
-        for (int i = 0; i < contents.length; i++) {
-            if (contents[i] != null) {
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putByte("Slot", (byte) i);
-                contents[i].writeToNBT(itemTag);
-                itemList.addTag(itemTag);
-            }
-        }
-
-        tag.put("BackpackInventory", itemList);
+        BackpackData.writeContents(backpackStack.getData(), contents);
         backpackStack.setMetadata(0);
     }
 
@@ -207,16 +175,12 @@ public class ItemBackpack extends Item implements IArmorItem<HumanArmorShape> {
         if (backpackStack == null || !(backpackStack.getItem() instanceof ItemBackpack)) {
             return 0;
         }
-        CompoundTag tag = backpackStack.getData();
-        if (tag.containsKey("BackpackInventory")) {
-            return tag.getList("BackpackInventory").tagCount();
-        }
-        return 0;
+        return BackpackData.countContents(backpackStack.getData());
     }
 
     public static int getFreeSlotCount(ItemStack backpackStack) {
         ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
-        int attachmentSlots = backpackStack.getData().containsKey("Attachment") ? 1 : 0;
+        int attachmentSlots = backpackStack.getData().containsKey(BackpackData.ATTACHMENT) ? 1 : 0;
         return Math.max(0, backpack.getCapacity() - getOccupiedSlotCount(backpackStack) - attachmentSlots);
     }
 
@@ -224,25 +188,14 @@ public class ItemBackpack extends Item implements IArmorItem<HumanArmorShape> {
         if (backpackStack == null || !(backpackStack.getItem() instanceof ItemBackpack)) {
             return null;
         }
-        CompoundTag tag = backpackStack.getData();
-        if (tag.containsKey("Attachment")) {
-            return ItemStack.readItemStackFromNbt(tag.getCompound("Attachment"));
-        }
-        return null;
+        return BackpackData.readAttachment(backpackStack.getData());
     }
 
     public static void setAttachment(ItemStack backpackStack, ItemStack attachment) {
         if (backpackStack == null || !(backpackStack.getItem() instanceof ItemBackpack)) {
             return;
         }
-        CompoundTag tag = backpackStack.getData();
-        if (attachment != null) {
-            CompoundTag attachmentTag = new CompoundTag();
-            attachment.writeToNBT(attachmentTag);
-            tag.put("Attachment", attachmentTag);
-        } else {
-            tag.getValue().remove("Attachment");
-        }
+        BackpackData.writeAttachment(backpackStack.getData(), attachment);
         backpackStack.setMetadata(0);
     }
 
