@@ -14,7 +14,7 @@
 	"contact": {
 		"sources": "https://github.com/SajmonOriginal/better-with-bags"
 	},
-	"license": "MIT",
+	"license": "See LICENSE",
 	"icon": "icon.png",
 	"environment": "*",
 	"entrypoints": {

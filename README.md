@@ -53,4 +53,4 @@ Large and Reinforced backpacks slow you down, but only when they have items in t
 
 ## License
 
-[MIT](LICENSE)
+See [LICENSE](LICENSE). Short version: free for personal use and free modpacks with attribution, no commercial use without permission.
