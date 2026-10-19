@@ -137,9 +137,8 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
         if ((Object) this instanceof ScreenInventoryCreative) {
             return this.xSize;
         }
-        return this.bwb$currentTier == BackpackTier.LARGE ||
-            this.bwb$currentTier == BackpackTier.REINFORCED ||
-            this.bwb$currentTier == BackpackTier.NETHER ? ATTACHMENT_PANEL_WIDTH : EXTENSION_WIDTH;
+        return this.bwb$currentTier != null && this.bwb$currentTier.supportsAttachment()
+            ? ATTACHMENT_PANEL_WIDTH : EXTENSION_WIDTH;
     }
 
     @Unique
@@ -216,9 +215,7 @@ public abstract class ScreenInventoryMixin extends ScreenContainerAbstract imple
         int panelHeight = EXTENSION_OVERLAP + EXTENSION_TITLE_HEIGHT + this.bwb$backpackRows * ROW_HEIGHT + EXTENSION_BOTTOM_HEIGHT;
         this.drawTexturedModalRect(guiLeft, panelY, 0, 0, EXTENSION_WIDTH, panelHeight);
 
-        if (this.bwb$currentTier == BackpackTier.LARGE ||
-            this.bwb$currentTier == BackpackTier.REINFORCED ||
-            this.bwb$currentTier == BackpackTier.NETHER) {
+        if (this.bwb$currentTier.supportsAttachment()) {
             this.drawTexturedModalRect(guiLeft + 174, panelY + 13, 174, 13, 36, 26);
         }
 

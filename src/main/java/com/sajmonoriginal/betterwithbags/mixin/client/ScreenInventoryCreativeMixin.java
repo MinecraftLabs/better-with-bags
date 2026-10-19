@@ -171,7 +171,7 @@ public abstract class ScreenInventoryCreativeMixin extends ScreenInventory {
         int panelHeight = EXTENSION_OVERLAP + EXTENSION_TITLE_HEIGHT + rows * ROW_HEIGHT + EXTENSION_BOTTOM_HEIGHT;
         this.drawTexturedModalRect(guiLeft, panelY, 0, 0, EXTENSION_WIDTH, panelHeight);
 
-        if (tier == BackpackTier.LARGE || tier == BackpackTier.REINFORCED || tier == BackpackTier.NETHER) {
+        if (tier.supportsAttachment()) {
             this.drawTexturedModalRect(guiLeft + 174, panelY + 13, 174, 13, 36, 26);
         }
 

@@ -102,7 +102,7 @@ public class SlotBackpackAttachment extends Slot {
 
         ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
         BackpackTier tier = backpack.getTier();
-        return tier == BackpackTier.LARGE || tier == BackpackTier.REINFORCED || tier == BackpackTier.NETHER;
+        return tier.supportsAttachment();
     }
 
     private static class DummyContainer implements Container {

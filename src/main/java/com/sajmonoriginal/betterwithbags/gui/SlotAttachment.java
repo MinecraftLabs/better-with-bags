@@ -77,10 +77,6 @@ public class SlotAttachment extends Slot {
         if (backpackStack == null) return false;
         if (!(backpackStack.getItem() instanceof ItemBackpack)) return false;
 
-        ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
-        com.sajmonoriginal.betterwithbags.item.BackpackTier tier = backpack.getTier();
-        return tier == com.sajmonoriginal.betterwithbags.item.BackpackTier.LARGE ||
-               tier == com.sajmonoriginal.betterwithbags.item.BackpackTier.REINFORCED ||
-               tier == com.sajmonoriginal.betterwithbags.item.BackpackTier.NETHER;
+        return ((ItemBackpack) backpackStack.getItem()).getTier().supportsAttachment();
     }
 }

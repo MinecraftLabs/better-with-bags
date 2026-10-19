@@ -25,7 +25,7 @@ public class ScreenBackpackBlock extends ScreenBackpackResponsive {
         this.container = (ContainerBackpackBlock) this.inventorySlots;
         this.rows = container.getRows();
         BackpackTier tier = container.getTier();
-        boolean hasAttachmentSlot = tier == BackpackTier.LARGE || tier == BackpackTier.REINFORCED || tier == BackpackTier.NETHER;
+        boolean hasAttachmentSlot = tier.supportsAttachment();
         this.xSize = hasAttachmentSlot ? 199 : 176;
         this.ySize = 121 + rows * 18;
         this.guiTexture = GUI_TEXTURE_BASE + tier.getName() + ".png";
@@ -44,7 +44,7 @@ public class ScreenBackpackBlock extends ScreenBackpackResponsive {
         this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, 176, rows * 18 + 17 + 7);
 
         BackpackTier tier = container.getTier();
-        if (tier == BackpackTier.LARGE || tier == BackpackTier.REINFORCED || tier == BackpackTier.NETHER) {
+        if (tier.supportsAttachment()) {
             this.drawTexturedModalRect(guiLeft + 174, guiTop + 13, 174, 13, 25, 26);
         }
     }
