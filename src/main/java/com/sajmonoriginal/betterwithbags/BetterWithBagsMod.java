@@ -41,8 +41,8 @@ public class BetterWithBagsMod implements ModInitializer {
 
     private static void registerContent() {
         BackpackRecipes.registerRecipeTypes();
-        new BackpackItems().initializeItems();
         new BackpackBlocks().initializeBlocks();
+        new BackpackItems().initializeItems();
         LOGGER.info("Registered items starting at ID {} and blocks starting at ID {}", itemIdStart, blockIdStart);
     }
 }
