@@ -8,15 +8,13 @@
 	"mixins": [
 		"ContainerInventoryMixin",
 		"EntityItemMixin",
-		"InventoryPlayerMixin",
 		"ItemStackMixin",
 		"MenuAbstractMixin",
 		"MenuInventoryMixin",
 		"PlayerMixin",
 		"PlayerMixinBagScreens",
 		"SlotSetMixin",
-		"accessor.MenuAbstractAccessor",
-		"accessor.PlayerAccessor"
+		"accessor.MenuAbstractAccessor"
 	],
 	"client": [
 		"client.EntityGeometryMojangDataCacheMixin",
