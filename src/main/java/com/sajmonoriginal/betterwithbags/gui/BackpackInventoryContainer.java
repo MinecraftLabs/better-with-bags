@@ -1,5 +1,6 @@
 package com.sajmonoriginal.betterwithbags.gui;
 
+import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
@@ -9,15 +10,16 @@ import net.minecraft.core.player.inventory.container.ContainerInventory;
 public class BackpackInventoryContainer implements Container {
     private final ContainerInventory playerInventory;
     private final int slotIndex;
-    private final ItemStack backpackStack;
+    private final BackpackTier tier;
     private final int capacity;
     private final ItemStack[] contents;
 
-    public BackpackInventoryContainer(ContainerInventory playerInventory, int slotIndex, ItemStack backpackStack) {
+    public BackpackInventoryContainer(ContainerInventory playerInventory, int slotIndex) {
         this.playerInventory = playerInventory;
         this.slotIndex = slotIndex;
-        this.backpackStack = backpackStack;
+        ItemStack backpackStack = playerInventory.mainInventory[slotIndex];
         ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
+        this.tier = backpack.getTier();
         this.capacity = backpack.getCapacity();
 
         ItemStack[] nbtContents = ItemBackpack.getBackpackContents(backpackStack);
@@ -25,7 +27,12 @@ public class BackpackInventoryContainer implements Container {
     }
 
     private ItemStack getBackpackStack() {
-        return backpackStack;
+        ItemStack current = playerInventory.mainInventory[slotIndex];
+        if (current != null && current.getItem() instanceof ItemBackpack
+            && ((ItemBackpack) current.getItem()).getTier() == tier) {
+            return current;
+        }
+        return null;
     }
 
     @Override
@@ -81,26 +88,19 @@ public class BackpackInventoryContainer implements Container {
 
     @Override
     public void setChanged() {
-        ItemStack current = getBackpackStack();
-        if (current != null && current.getItem() instanceof ItemBackpack) {
-            ItemBackpack.setBackpackContents(current, contents);
-        }
+        flush();
     }
 
     public void flush() {
         ItemStack current = getBackpackStack();
-        if (current != null && current.getItem() instanceof ItemBackpack) {
+        if (current != null) {
             ItemBackpack.setBackpackContents(current, contents);
         }
     }
 
     @Override
     public boolean stillValid(Player player) {
-        if (player.world != null && player.world.isClientSide) {
-            ItemStack current = playerInventory.mainInventory[slotIndex];
-            return current != null && current.getItem() == backpackStack.getItem();
-        }
-        return playerInventory.mainInventory[slotIndex] == backpackStack;
+        return getBackpackStack() != null;
     }
 
     @Override
