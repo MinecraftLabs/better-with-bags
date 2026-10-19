@@ -133,7 +133,7 @@ public class ContainerBackpack extends MenuAbstract {
         }
         if (slot.index >= playerStart) {
             ItemStack stack = slot.getItemStack();
-            if (stack != null && stack.getItem() instanceof ItemBackpack) {
+            if (ItemBackpack.isBackpack(stack)) {
                 return IntLists.EMPTY_LIST;
             }
             if (stack != null && stack.getItem() instanceof com.sajmonoriginal.betterwithbags.item.ItemBedroll) {

@@ -10,6 +10,7 @@ import net.minecraft.core.enums.HumanArmorShape;
 import net.minecraft.core.item.IArmorItem;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.item.block.ItemBlock;
 import net.minecraft.core.item.material.ArmorMaterial;
 import net.minecraft.core.util.helper.Direction;
 import net.minecraft.core.util.helper.Side;
@@ -119,6 +120,14 @@ public class ItemBackpack extends Item implements IArmorItem {
     @Override
     public HumanArmorShape getArmorShape() {
         return HumanArmorShape.CHEST;
+    }
+
+    public static boolean isBackpack(ItemStack stack) {
+        if (stack == null) return false;
+        Item item = stack.getItem();
+        if (item instanceof ItemBackpack) return true;
+        return item instanceof ItemBlock
+            && BackpackBlocks.getTierForBlockId(((ItemBlock<?>) item).getBlock().id()) != null;
     }
 
     public static boolean isWearingBackpack(Player player) {

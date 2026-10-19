@@ -14,6 +14,6 @@ public class SlotBackpackItem extends Slot {
     @Override
     public boolean mayPlace(ItemStack stack) {
         if (stack == null) return false;
-        return !(stack.getItem() instanceof ItemBackpack);
+        return !ItemBackpack.isBackpack(stack);
     }
 }

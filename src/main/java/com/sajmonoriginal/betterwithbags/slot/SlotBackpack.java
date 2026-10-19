@@ -20,7 +20,7 @@ public class SlotBackpack extends Slot {
     @Override
     public boolean mayPlace(ItemStack stack) {
         if (stack == null) return false;
-        if (stack.getItem() instanceof ItemBackpack) return false;
+        if (ItemBackpack.isBackpack(stack)) return false;
         if (!isActive()) return false;
         return true;
     }
