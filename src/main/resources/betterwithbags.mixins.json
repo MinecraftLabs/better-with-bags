@@ -13,7 +13,6 @@
 		"MenuInventoryMixin",
 		"PlayerMixin",
 		"PlayerMixinBagScreens",
-		"SlotSetMixin",
 		"accessor.MenuAbstractAccessor"
 	],
 	"client": [
