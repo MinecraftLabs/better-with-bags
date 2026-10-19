@@ -9,10 +9,9 @@ import org.slf4j.LoggerFactory;
 import turniplabs.halplibe.HalpLibe;
 import turniplabs.halplibe.event.defs.CommonEvents;
 import turniplabs.halplibe.helper.network.NetworkHandler;
-import turniplabs.halplibe.util.ConfigHandler;
+import turniplabs.halplibe.util.TomlConfigHandler;
 import turniplabs.halplibe.util.dependency.Key;
-
-import java.util.Properties;
+import turniplabs.halplibe.util.toml.Toml;
 
 public class BetterWithBagsMod implements ModInitializer {
     public static final String MOD_ID = HalpLibe.registerMod("betterwithbags");
@@ -22,13 +21,12 @@ public class BetterWithBagsMod implements ModInitializer {
     public static int blockIdStart;
 
     static {
-        Properties prop = new Properties();
-        prop.setProperty("starting_item_id", "29000");
-        prop.setProperty("starting_block_id", "4000");
-        ConfigHandler config = new ConfigHandler(MOD_ID, prop);
+        Toml defaults = new Toml("Better With Bags");
+        defaults.addEntry("starting_item_id", "First item ID", 29000);
+        defaults.addEntry("starting_block_id", "First block ID", 4000);
+        TomlConfigHandler config = new TomlConfigHandler(MOD_ID, defaults);
         itemIdStart = config.getInt("starting_item_id");
         blockIdStart = config.getInt("starting_block_id");
-        config.updateConfig();
     }
 
     @Override
