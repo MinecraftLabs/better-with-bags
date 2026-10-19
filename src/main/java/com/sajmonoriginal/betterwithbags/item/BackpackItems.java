@@ -22,11 +22,15 @@ public class BackpackItems {
         return BetterWithBagsMod.MOD_ID + ":item/" + name;
     }
 
-    private static ItemBuilder backpackBuilder() {
+    private static ItemBuilder itemBuilder() {
         return new ItemBuilder(BetterWithBagsMod.MOD_ID)
             .setStackSize(1)
             .setCreativeInventoryPlacement(
                 new CreativeInventoryPlacement.Category(CreativeInventoryCategory.MISCELLANEOUS));
+    }
+
+    private static ItemBuilder backpackBuilder() {
+        return itemBuilder().addTags(ItemTags.IS_PERSISTENT);
     }
 
     public void initializeItems() {
@@ -49,10 +53,10 @@ public class BackpackItems {
             .build(new ItemBackpack("backpack.reinforced", itemKey("backpack_reinforced"), currentId++, BackpackTier.REINFORCED));
 
         BACKPACK_NETHER = backpackBuilder()
-            .build(new ItemBackpack("backpack.nether", itemKey("backpack_nether"), currentId++, BackpackTier.NETHER))
-            .withTags(ItemTags.IS_FIRE_PROOF);
+            .addTags(ItemTags.IS_FIRE_PROOF)
+            .build(new ItemBackpack("backpack.nether", itemKey("backpack_nether"), currentId++, BackpackTier.NETHER));
 
-        BEDROLL = backpackBuilder()
+        BEDROLL = itemBuilder()
             .build(new ItemBedroll("bedroll", itemKey("bedroll"), currentId++));
     }
 
