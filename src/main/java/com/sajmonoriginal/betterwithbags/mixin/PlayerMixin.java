@@ -49,7 +49,7 @@ public abstract class PlayerMixin extends Entity {
         at = @At(value = "INVOKE", target = "Lnet/minecraft/core/entity/player/Player;sendStatusMessageTranslated(Ljava/lang/String;[Ljava/lang/String;)V")
     )
     private void bwb$redirectSpawnMessage(Player self, String key, String[] args) {
-        if (!BedrollSleepTracker.isSleepingInBedroll(self)) {
+        if (!"messages.bed.setSpawn".equals(key) || !BedrollSleepTracker.isSleepingInBedroll(self)) {
             self.sendStatusMessageTranslated(key, args);
         }
     }
