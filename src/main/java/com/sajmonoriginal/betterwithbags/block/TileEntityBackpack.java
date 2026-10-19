@@ -22,7 +22,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
     private ItemStack[] contents;
     private BackpackTier tier;
     private ItemStack attachment;
-    private String customName;
+    private CompoundTag itemData = new CompoundTag();
     private boolean taken;
 
     public TileEntityBackpack() {
@@ -57,12 +57,10 @@ public class TileEntityBackpack extends TileEntity implements Container {
         return attachment != null;
     }
 
-    public String getCustomName() {
-        return customName;
-    }
-
-    public void setCustomName(String customName) {
-        this.customName = customName == null || customName.isEmpty() ? null : customName;
+    public ItemStack createDisplayStack() {
+        ItemStack stack = new ItemStack(BackpackItems.getItemForTier(tier));
+        stack.setData(itemData);
+        return stack;
     }
 
     public boolean isEmpty() {
@@ -79,17 +77,16 @@ public class TileEntityBackpack extends TileEntity implements Container {
             System.arraycopy(stored, 0, contents, 0, Math.min(stored.length, contents.length));
         }
         attachment = ItemBackpack.getAttachment(backpackStack);
-        setCustomName(backpackStack.getCustomName());
+        itemData = backpackStack.getData().clone();
+        itemData.getValue().remove(BackpackData.CONTENTS);
+        itemData.getValue().remove(BackpackData.ATTACHMENT);
         setChanged();
     }
 
     public ItemStack takeAsItem() {
-        ItemStack stack = new ItemStack(BackpackItems.getItemForTier(tier));
+        ItemStack stack = createDisplayStack();
         ItemBackpack.setBackpackContents(stack, contents);
-        if (attachment != null) {
-            ItemBackpack.setAttachment(stack, attachment);
-        }
-        stack.setCustomName(customName);
+        ItemBackpack.setAttachment(stack, attachment);
 
         Arrays.fill(contents, null);
         attachment = null;
@@ -181,7 +178,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
         }
         this.attachment = BackpackData.readAttachment(tag);
 
-        setCustomName(tag.containsKey("CustomName") ? tag.getString("CustomName") : null);
+        this.itemData = tag.containsKey("ItemData") ? tag.getCompound("ItemData").clone() : new CompoundTag();
     }
 
     @Override
@@ -191,9 +188,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
         BackpackData.writeContents(tag, contents);
         BackpackData.writeAttachment(tag, attachment);
 
-        if (customName != null) {
-            tag.putString("CustomName", customName);
-        }
+        tag.put("ItemData", itemData.clone());
     }
 
     @Override
