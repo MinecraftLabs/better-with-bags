@@ -6,12 +6,10 @@ import net.minecraft.core.block.Blocks;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.item.Items;
 import turniplabs.halplibe.helper.RecipeBuilder;
-import turniplabs.halplibe.util.RecipeEntrypoint;
 
-public class BackpackRecipes implements RecipeEntrypoint {
+public class BackpackRecipes {
 
-    @Override
-    public void onRecipesReady() {
+    public static void registerRecipes() {
         String modId = BetterWithBagsMod.MOD_ID;
 
         RecipeBuilder.Shaped(modId, "CLC", "LSL", "CLC")
@@ -54,8 +52,7 @@ public class BackpackRecipes implements RecipeEntrypoint {
             .create("bedroll", new ItemStack(BackpackItems.BEDROLL, 1));
     }
 
-    @Override
-    public void initNamespaces() {
+    public static void initNamespaces() {
         RecipeBuilder.initNameSpace(BetterWithBagsMod.MOD_ID);
     }
 }

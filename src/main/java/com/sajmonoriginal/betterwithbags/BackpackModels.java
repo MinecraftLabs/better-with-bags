@@ -11,19 +11,19 @@ import com.sajmonoriginal.betterwithbags.model.ItemModelPlacedBackpack;
 import com.sajmonoriginal.betterwithbags.model.ItemModelPlacedBedroll;
 import com.sajmonoriginal.betterwithbags.render.TileEntityRendererBackpack;
 import com.sajmonoriginal.betterwithbags.render.TileEntityRendererBedroll;
-import net.minecraft.client.render.EntityRendererDispatcher;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.TileEntityRenderDispatcher;
-import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.client.render.item.model.ItemModelDispatcher;
 import net.minecraft.client.render.item.model.ItemModelStandard;
 import net.minecraft.core.block.Block;
 import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
-import turniplabs.halplibe.util.ModelEntrypoint;
 
 import java.io.InputStream;
 
-public class BackpackModels implements ModelEntrypoint {
+@Environment(EnvType.CLIENT)
+public class BackpackModels {
 
     private static final String MOD_ID = BetterWithBagsMod.MOD_ID;
 
@@ -44,8 +44,7 @@ public class BackpackModels implements ModelEntrypoint {
         loadGeo("/assets/betterwithbags/models/entity/bedroll_attachment.geo.json");
     }
 
-    @Override
-    public void initBlockModels(BlockModelDispatcher dispatcher) {
+    public static void initBlockModels(BlockModelDispatcher dispatcher) {
         dispatcher.addDispatch(BackpackBlocks.BACKPACK_BLOCK_SMALL, new BlockModelBag<>(BackpackBlocks.BACKPACK_BLOCK_SMALL));
         dispatcher.addDispatch(BackpackBlocks.BACKPACK_BLOCK_MEDIUM, new BlockModelBag<>(BackpackBlocks.BACKPACK_BLOCK_MEDIUM));
         dispatcher.addDispatch(BackpackBlocks.BACKPACK_BLOCK_LARGE, new BlockModelBag<>(BackpackBlocks.BACKPACK_BLOCK_LARGE));
@@ -54,8 +53,7 @@ public class BackpackModels implements ModelEntrypoint {
         dispatcher.addDispatch(BackpackBlocks.BEDROLL_BLOCK, new BlockModelBag<>(BackpackBlocks.BEDROLL_BLOCK));
     }
 
-    @Override
-    public void initItemModels(ItemModelDispatcher dispatcher) {
+    public static void initItemModels(ItemModelDispatcher dispatcher) {
         dispatcher.addDispatch(new ItemModelBackpack(BackpackItems.BACKPACK_SMALL, null)
             .setIcon(MOD_ID + ":item/backpack_small"));
         dispatcher.addDispatch(new ItemModelBackpack(BackpackItems.BACKPACK_MEDIUM, null)
@@ -78,18 +76,8 @@ public class BackpackModels implements ModelEntrypoint {
         dispatcher.addDispatch(new ItemModelPlacedBedroll(BackpackBlocks.BEDROLL_BLOCK.asItem()));
     }
 
-    @Override
-    public void initEntityModels(EntityRendererDispatcher dispatcher) {
-        loadBwbGeoModels();
-    }
-
-    @Override
-    public void initTileEntityModels(TileEntityRenderDispatcher dispatcher) {
+    public static void initTileEntityModels(TileEntityRenderDispatcher dispatcher) {
         dispatcher.assignRenderer(TileEntityBackpack.class, new TileEntityRendererBackpack());
         dispatcher.assignRenderer(TileEntityBedroll.class, new TileEntityRendererBedroll());
-    }
-
-    @Override
-    public void initBlockColors(BlockColorDispatcher dispatcher) {
     }
 }

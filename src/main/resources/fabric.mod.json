@@ -21,20 +21,8 @@
 		"main": [
 			"com.sajmonoriginal.betterwithbags.BetterWithBagsMod"
 		],
-		"beforeGameStart": [
-			"com.sajmonoriginal.betterwithbags.BetterWithBagsMod"
-		],
 		"client": [
 			"com.sajmonoriginal.betterwithbags.BetterWithBagsClientMod"
-		],
-		"afterClientStart": [
-			"com.sajmonoriginal.betterwithbags.BetterWithBagsClientMod"
-		],
-		"initModels": [
-			"com.sajmonoriginal.betterwithbags.BackpackModels"
-		],
-		"recipesReady": [
-			"com.sajmonoriginal.betterwithbags.BackpackRecipes"
 		]
 	},
 	"mixins": [
