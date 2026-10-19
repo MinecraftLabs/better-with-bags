@@ -34,7 +34,7 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
     public ContainerInventory inventory;
 
     @Unique
-    private static final int HIDDEN_Y = -9999;
+    private static final int BWB_HIDDEN_POS = -9999;
 
     @Unique
     private boolean bwb$hasBackpackSlots = false;
@@ -79,25 +79,25 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
 
         int maxCapacity = BackpackTier.REINFORCED.getSlots();
         for (int i = 0; i < maxCapacity; i++) {
-            SlotBackpack slot = new SlotBackpack(bwb$backpackContainer, inventory, i, HIDDEN_Y, HIDDEN_Y);
+            SlotBackpack slot = new SlotBackpack(bwb$backpackContainer, inventory, i, BWB_HIDDEN_POS, BWB_HIDDEN_POS);
             bwb$backpackSlots.add(slot);
             ((MenuAbstractAccessor) this).invokeAddSlot(slot);
         }
 
-        bwb$attachmentSlot = new SlotBackpackAttachment(inventory, HIDDEN_Y, HIDDEN_Y);
+        bwb$attachmentSlot = new SlotBackpackAttachment(inventory, BWB_HIDDEN_POS, BWB_HIDDEN_POS);
         ((MenuAbstractAccessor) this).invokeAddSlot(bwb$attachmentSlot);
     }
 
     @Override
     public void betterWithBags$refreshBackpackSlots() {
         if (inventory == null || inventory.player == null) {
-            hideBackpackSlots();
+            bwb$hideBackpackSlots();
             return;
         }
 
         ItemBackpack backpack = ItemBackpack.getWornBackpack(inventory.player);
         if (backpack == null) {
-            hideBackpackSlots();
+            bwb$hideBackpackSlots();
             return;
         }
 
@@ -116,8 +116,8 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
                 slot.x = 8 + col * 18;
                 slot.y = BackpackPanelLayout.FIRST_SLOT_Y + row * BackpackPanelLayout.ROW_HEIGHT;
             } else {
-                slot.x = HIDDEN_Y;
-                slot.y = HIDDEN_Y;
+                slot.x = BWB_HIDDEN_POS;
+                slot.y = BWB_HIDDEN_POS;
             }
         }
 
@@ -125,8 +125,8 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
             bwb$attachmentSlot.x = BackpackPanelLayout.ATTACHMENT_SLOT_X;
             bwb$attachmentSlot.y = BackpackPanelLayout.FIRST_SLOT_Y;
         } else if (bwb$attachmentSlot != null) {
-            bwb$attachmentSlot.x = HIDDEN_Y;
-            bwb$attachmentSlot.y = HIDDEN_Y;
+            bwb$attachmentSlot.x = BWB_HIDDEN_POS;
+            bwb$attachmentSlot.y = BWB_HIDDEN_POS;
         }
     }
 
@@ -140,18 +140,18 @@ public abstract class MenuInventoryMixin implements BackpackMenuCapable {
     }
 
     @Unique
-    private void hideBackpackSlots() {
+    private void bwb$hideBackpackSlots() {
         this.bwb$hasBackpackSlots = false;
         this.bwb$backpackRows = 0;
 
         for (SlotBackpack slot : bwb$backpackSlots) {
-            slot.x = HIDDEN_Y;
-            slot.y = HIDDEN_Y;
+            slot.x = BWB_HIDDEN_POS;
+            slot.y = BWB_HIDDEN_POS;
         }
 
         if (bwb$attachmentSlot != null) {
-            bwb$attachmentSlot.x = HIDDEN_Y;
-            bwb$attachmentSlot.y = HIDDEN_Y;
+            bwb$attachmentSlot.x = BWB_HIDDEN_POS;
+            bwb$attachmentSlot.y = BWB_HIDDEN_POS;
         }
     }
 
