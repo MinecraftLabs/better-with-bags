@@ -44,7 +44,7 @@ Large and Reinforced backpacks slow you down, but only when they have items in t
 
 - [Babric](https://github.com/Turnip-Labs/babric-instance-fabric/releases)
 - [HalpLibe](https://github.com/Turnip-Labs/bta-halplibe/releases)
-- [DragonFly](https://github.com/UselessSolutions/DragonFly) (bundled in the jar)
+- [Catalyst Core](https://github.com/MartinSVK12/catalyst/releases) (also included in Catalyst All)
 
 ## Credits
 
