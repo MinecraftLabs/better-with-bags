@@ -1,33 +1,26 @@
-package com.sajmonoriginal.betterwithbags.gui;
+package com.sajmonoriginal.betterwithbags.slot;
 
-import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
+import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
 import com.sajmonoriginal.betterwithbags.item.ItemBedroll;
 import net.minecraft.core.item.ItemStack;
-import net.minecraft.core.player.inventory.container.ContainerInventory;
 import net.minecraft.core.player.inventory.slot.Slot;
 
-public class SlotAttachment extends Slot {
-    private final ContainerInventory playerInventory;
-    private final int slotIndex;
+public class SlotAttachmentBlock extends Slot {
+    private final TileEntityBackpack tileEntity;
 
-    public SlotAttachment(ContainerInventory playerInventory, int slotIndex, int x, int y) {
+    public SlotAttachmentBlock(TileEntityBackpack tileEntity, int x, int y) {
         super(null, 0, x, y);
-        this.playerInventory = playerInventory;
-        this.slotIndex = slotIndex;
-    }
-
-    private ItemStack getBackpackStack() {
-        return playerInventory.mainInventory[slotIndex];
+        this.tileEntity = tileEntity;
     }
 
     @Override
     public ItemStack getItemStack() {
-        return ItemBackpack.getAttachment(getBackpackStack());
+        return tileEntity.getAttachment();
     }
 
     @Override
     public void set(ItemStack stack) {
-        ItemBackpack.setAttachment(getBackpackStack(), stack);
+        tileEntity.setAttachment(stack);
         this.setChanged();
     }
 
@@ -47,7 +40,7 @@ public class SlotAttachment extends Slot {
             if (current.stackSize == 0) {
                 set(null);
             } else {
-                ItemBackpack.setAttachment(getBackpackStack(), current);
+                tileEntity.setAttachment(current);
             }
         }
         this.setChanged();
@@ -61,6 +54,7 @@ public class SlotAttachment extends Slot {
 
     @Override
     public void setChanged() {
+        tileEntity.setChanged();
     }
 
     @Override
@@ -71,12 +65,6 @@ public class SlotAttachment extends Slot {
     @Override
     public boolean mayPlace(ItemStack stack) {
         if (stack == null) return false;
-        boolean isValidItem = stack.getItem() instanceof ItemBedroll;
-        if (!isValidItem) return false;
-        ItemStack backpackStack = getBackpackStack();
-        if (backpackStack == null) return false;
-        if (!(backpackStack.getItem() instanceof ItemBackpack)) return false;
-
-        return ((ItemBackpack) backpackStack.getItem()).getTier().supportsAttachment();
+        return stack.getItem() instanceof ItemBedroll;
     }
 }

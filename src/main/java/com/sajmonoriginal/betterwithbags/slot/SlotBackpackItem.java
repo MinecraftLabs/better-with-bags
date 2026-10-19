@@ -1,4 +1,4 @@
-package com.sajmonoriginal.betterwithbags.gui;
+package com.sajmonoriginal.betterwithbags.slot;
 
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
 import net.minecraft.core.item.ItemStack;

@@ -3,6 +3,8 @@ package com.sajmonoriginal.betterwithbags.gui;
 import com.sajmonoriginal.betterwithbags.block.TileEntityBackpack;
 import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
+import com.sajmonoriginal.betterwithbags.slot.SlotAttachmentBlock;
+import com.sajmonoriginal.betterwithbags.slot.SlotBackpackItem;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
