@@ -112,7 +112,7 @@ public class TileEntityBackpack extends TileEntity implements Container {
         if (worldObj.getTileEntity(tilePos) != this) {
             return false;
         }
-        return player.distanceTo(tilePos.x + 0.5, tilePos.y + 0.5, tilePos.z + 0.5) <= 64.0;
+        return player.distanceToSqr(tilePos.x + 0.5, tilePos.y + 0.5, tilePos.z + 0.5) <= 64.0;
     }
 
     @Override
