@@ -20,6 +20,7 @@ public class ContainerBackpack extends MenuAbstract {
     private final BackpackInventoryContainer backpackContainer;
     private final ContainerInventory playerInventory;
     private final int heldSlotIndex;
+    private final int heldMenuSlot;
 
     public ContainerBackpack(ContainerInventory playerInventory, ItemStack backpackStack) {
         this.playerInventory = playerInventory;
@@ -57,6 +58,9 @@ public class ContainerBackpack extends MenuAbstract {
         for (int col = 0; col < 9; col++) {
             this.addSlot(new Slot(playerInventory, col, 8 + col * 18, hotbarY));
         }
+
+        Slot heldSlot = this.getSlotFor(playerInventory, heldSlotIndex);
+        this.heldMenuSlot = heldSlot != null ? heldSlot.index : -1;
     }
 
     public int getRows() {
@@ -68,7 +72,33 @@ public class ContainerBackpack extends MenuAbstract {
     }
 
     @Override
+    public ItemStack clicked(InventoryAction action, int[] args, Player player) {
+        if (args != null && args.length > 0 && touchesHeldBackpack(action, args)) {
+            return null;
+        }
+        return super.clicked(action, args, player);
+    }
+
+    private boolean touchesHeldBackpack(InventoryAction action, int[] args) {
+        if (action == InventoryAction.DRAG_ITEMS_ALL || action == InventoryAction.DRAG_ITEMS_ONE
+            || action == InventoryAction.CREATIVE_DRAG || action == InventoryAction.PICKUP_SIMILAR) {
+            return false;
+        }
+        if (args[0] == heldMenuSlot) {
+            return true;
+        }
+        return action == InventoryAction.HOTBAR_ITEM_SWAP && args.length > 1
+            && args[1] >= 1 && args[1] <= 9 && getHotbarSlotId(args[1]) == heldMenuSlot;
+    }
+
+    @Override
     public IntList getMoveSlots(InventoryAction action, Slot slot, int target, Player player) {
+        IntList moveSlots = getMoveSlotsUnfiltered(action, slot);
+        moveSlots.rem(heldMenuSlot);
+        return moveSlots;
+    }
+
+    private IntList getMoveSlotsUnfiltered(InventoryAction action, Slot slot) {
         int attachmentSlot = capacity;
         int playerStart = capacity + 1;
         if (slot.index < capacity) {
