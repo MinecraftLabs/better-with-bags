@@ -64,6 +64,14 @@ public abstract class MenuBackpackBase extends MenuAbstract {
     }
 
     @Override
+    public ItemStack clicked(InventoryAction action, int[] args, Player player) {
+        if (!stillValid(player)) {
+            return null;
+        }
+        return super.clicked(action, args, player);
+    }
+
+    @Override
     public IntList getMoveSlots(InventoryAction action, Slot slot, int target, Player player) {
         int playerStart = getPlayerSlotStart();
         if (action == InventoryAction.MOVE_ALL && slot.index >= playerStart) {
