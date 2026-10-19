@@ -1,7 +1,7 @@
 package com.sajmonoriginal.betterwithbags.mixin;
 
-import com.sajmonoriginal.betterwithbags.item.BackpackTier;
 import com.sajmonoriginal.betterwithbags.item.ItemBackpack;
+import net.minecraft.core.block.material.Materials;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityItem;
 import net.minecraft.core.item.ItemStack;
@@ -22,13 +22,21 @@ public abstract class EntityItemMixin extends Entity {
         super(world);
     }
 
-    @Inject(method = "<init>(Lnet/minecraft/core/world/World;DDDLnet/minecraft/core/item/ItemStack;)V", at = @At("RETURN"))
-    private void bwb$setFireImmuneForNetherBackpack(World world, double x, double y, double z, ItemStack itemStack, CallbackInfo ci) {
-        if (itemStack != null && itemStack.getItem() instanceof ItemBackpack) {
-            BackpackTier tier = ((ItemBackpack) itemStack.getItem()).getTier();
-            if (tier.isFireResistant()) {
-                this.fireImmune = true;
-            }
+    @Inject(method = "handleBuoyancy", at = @At("HEAD"), cancellable = true)
+    private void bwb$floatFireproofBackpackInLava(CallbackInfo ci) {
+        if (this.item == null || !(this.item.getItem() instanceof ItemBackpack)) {
+            return;
         }
+        if (!((ItemBackpack) this.item.getItem()).getTier().isFireResistant()) {
+            return;
+        }
+        if (!this.world.isMaterialInBB(this.bb, Materials.LAVA)) {
+            return;
+        }
+
+        this.xd *= 0.98F;
+        this.zd *= 0.98F;
+        this.yd = Math.min(this.yd + 0.02, 0.1);
+        ci.cancel();
     }
 }
